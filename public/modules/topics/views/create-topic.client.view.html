@@ -1,0 +1,53 @@
+<section data-ng-controller="TopicsController">
+    <div class="page-header">
+        <h1>New Topic</h1>
+    </div>
+    <div class="col-md-12">
+        <form class="form-horizontal" data-ng-submit="create()" novalidate>
+            <fieldset>
+                <div class="form-group">
+                    <label class="control-label" for="title">Title</label>
+                    <div class="controls">
+                        <input type="text" data-ng-model="title" id="title" class="form-control" placeholder="Title" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="description">Description</label>
+                    <div class="controls">
+                        <textarea data-ng-model="description" id="description" class="form-control" cols="12" rows="4" placeholder="Description"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="tag" data-ng-init="findTags()">Tag</label>
+                    <div class="controls">
+                        <select data-ng-model="tag" id="content_type" class="form-control">
+                            <option ng-value="tag._id" ng-repeat="tag in tags">{{tag.title}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="content_type">Content Type</label>
+                    <div class="controls">
+                        <select data-ng-model="content.type" data-ng-init="content.type = 'image'" id="content_type" class="form-control">
+                            <option value="image">Image</option>
+                            <option value="youtube">Youtube</option>
+                            <option value="dailymotion">Dailymotion</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="content_url">Content Url</label>
+                    <div class="controls">
+                        <textarea data-ng-model="content.url" id="content_url" class="form-control" placeholder="Content Url" cols="12" rows="4" required></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-default">
+                </div>
+				<div data-ng-show="error" class="text-danger">
+					<strong data-ng-bind="error"></strong>
+				</div>
+            </fieldset>
+        </form>
+    </div>
+</section>

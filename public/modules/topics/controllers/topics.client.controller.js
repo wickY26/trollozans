@@ -71,7 +71,9 @@ angular.module('topics').controller('TopicsController', ['$scope', '$stateParams
 
 		// Find a list of Tags
 		$scope.findTags = function () {
-			$scope.tags = Tags.query();
+			Tags.query(function (response) {
+				$scope.tags = response;
+			});
 		};
 	}
 ]);

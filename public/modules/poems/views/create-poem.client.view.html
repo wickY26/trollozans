@@ -6,23 +6,29 @@
         <form class="form-horizontal" data-ng-submit="create()" novalidate>
             <fieldset>
                 <div class="form-group">
+                    <label class="control-label" for="title">Title</label>
+                    <div class="controls">
+                        <input type="text" data-ng-model="title" id="title" class="form-control" placeholder="Title" required>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label class="control-label" for="content">Content</label>
                     <div class="controls">
                         <textarea data-ng-model="content" id="content" class="form-control" placeholder="Content" cols="12" rows="4" required></textarea>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="topic" data-ng-init="findTopics()">Topic</label>
+                    <label class="control-label" for="topic">Topic</label>
                     <div class="controls">
-                        <select data-ng-model="topic" id="content_type" class="form-control" required>
+                        <select data-ng-model="topic" id="topic" class="form-control" data-ng-init="findTopics()" required>
                             <option ng-value="topic._id" ng-repeat="topic in topics">{{topic.title}}</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="tag" data-ng-init="findTags()">Tag</label>
+                    <label class="control-label" for="tags">Tag</label>
                     <div class="controls">
-                        <select data-ng-model="tag" id="content_type" class="form-control" required>
+                        <select data-ng-model="tag" id="tags" class="form-control" data-ng-init="findTags()" required>
                             <option ng-value="tag._id" ng-repeat="tag in tags">{{tag.title}}</option>
                         </select>
                     </div>

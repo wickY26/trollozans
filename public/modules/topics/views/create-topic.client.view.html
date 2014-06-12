@@ -18,9 +18,9 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="tag" data-ng-init="findTags()">Tag</label>
+                    <label class="control-label" for="tags">Tag</label>
                     <div class="controls">
-                        <select data-ng-model="tag" id="content_type" class="form-control">
+                        <select data-ng-model="tag" id="tags" class="form-control" data-ng-init="findTags()" required>
                             <option ng-value="tag._id" ng-repeat="tag in tags">{{tag.title}}</option>
                         </select>
                     </div>

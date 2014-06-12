@@ -11,6 +11,16 @@ var mongoose = require('mongoose'),
  */
 var PoemSchema = new Schema({
 	/**
+	 * Title of Poem
+	 * @type {String}
+	 */
+	title: {
+		type: String,
+		default: '',
+		required: 'Please fill Poem title',
+		trim: true
+	},
+	/**
 	 * Content of Poem
 	 * @type {String}
 	 */
@@ -35,6 +45,14 @@ var PoemSchema = new Schema({
 		ref: 'Topic',
 		required: 'Please fill Poem topic'
 	},
+	/**
+	 * Tags of Poem
+	 * @type {Array}
+	 */
+	tags: [{
+		type: Schema.ObjectId,
+		ref: 'Tag'
+	}],
 	/**
 	 * Approve flag of Poem
 	 * @type {Boolean}

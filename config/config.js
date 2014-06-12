@@ -17,7 +17,7 @@ module.exports = _.extend(
 /**
  * Get files by glob patterns
  */
-module.exports.getGlobbedFiles = function(globPatterns, removeRoot) {
+module.exports.getGlobbedFiles = function (globPatterns, removeRoot) {
 	// For context switching
 	var _this = this;
 
@@ -29,7 +29,7 @@ module.exports.getGlobbedFiles = function(globPatterns, removeRoot) {
 
 	// If glob pattern is array so we use each pattern in a recursive way, otherwise we use glob 
 	if (_.isArray(globPatterns)) {
-		globPatterns.forEach(function(globPattern) {
+		globPatterns.forEach(function (globPattern) {
 			output = _.union(output, _this.getGlobbedFiles(globPattern, removeRoot));
 		});
 	} else if (_.isString(globPatterns)) {
@@ -38,9 +38,9 @@ module.exports.getGlobbedFiles = function(globPatterns, removeRoot) {
 		} else {
 			glob(globPatterns, {
 				sync: true
-			}, function(err, files) {
+			}, function (err, files) {
 				if (removeRoot) {
-					files = files.map(function(file) {
+					files = files.map(function (file) {
 						return file.replace(removeRoot, '');
 					});
 				}
@@ -56,7 +56,8 @@ module.exports.getGlobbedFiles = function(globPatterns, removeRoot) {
 /**
  * Get the modules JavaScript files
  */
-module.exports.getJavaScriptAssets = function(includeTests) {
+module.exports.getJavaScriptAssets = function (includeTests) {
+	console.log('this.assets', this.assets);
 	var output = this.getGlobbedFiles(this.assets.lib.js.concat(this.assets.js), 'public/');
 
 	// To include tests
@@ -64,13 +65,15 @@ module.exports.getJavaScriptAssets = function(includeTests) {
 		output = _.union(output, this.getGlobbedFiles(this.assets.tests));
 	}
 
+	console.log('output', output);
+
 	return output;
 };
 
 /**
  * Get the modules CSS files
  */
-module.exports.getCSSAssets = function() {
+module.exports.getCSSAssets = function () {
 	var output = this.getGlobbedFiles(this.assets.lib.css.concat(this.assets.css), 'public/');
 	return output;
 };

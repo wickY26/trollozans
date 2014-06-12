@@ -11,6 +11,7 @@ angular.module('poems').controller('PoemsController', ['$scope', '$stateParams',
 			var poem = new Poems({
 				content: this.content,
 				topic: this.topic,
+				title: this.title,
 				tags: [this.tag]
 			});
 
@@ -24,6 +25,7 @@ angular.module('poems').controller('PoemsController', ['$scope', '$stateParams',
 			// Clear form fields
 			this.content = '';
 			this.topic = '';
+			this.title = '';
 			this.tag = '';
 		};
 
@@ -69,12 +71,16 @@ angular.module('poems').controller('PoemsController', ['$scope', '$stateParams',
 
 		// Find a list of Topics
 		$scope.findTopics = function () {
-			$scope.topics = Topics.query();
+			Topics.query(function (response) {
+				$scope.topics = response;
+			});
 		};
 
 		// Find a list of Tags
 		$scope.findTags = function () {
-			$scope.tags = Tags.query();
+			Tags.query(function (response) {
+				$scope.tags = response;
+			});
 		};
 	}
 ]);

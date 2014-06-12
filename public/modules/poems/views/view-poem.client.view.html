@@ -1,8 +1,8 @@
 <section data-ng-controller="PoemsController" data-ng-init="findOne()">
 	<div class="page-header">
-		<h1 data-ng-bind="poem.name"></h1>
+		<p class="lead" data-ng-bind="poem.content"></p>
 	</div>
-	<div class="pull-right" data-ng-show="authentication.user._id == poem.user._id">
+	<div class="pull-right">
 		<a class="btn btn-primary" href="/#!/poems/{{poem._id}}/edit">
 			<i class="glyphicon glyphicon-edit"></i>
 		</a>
@@ -15,7 +15,7 @@
 			Posted on
 			<span data-ng-bind="poem.created | date:'mediumDate'"></span>
 			by
-			<span data-ng-bind="poem.user.displayName"></span>
+			<span data-ng-bind="poem.author.displayName"></span>
 		</em>
 	</small>
 </section>

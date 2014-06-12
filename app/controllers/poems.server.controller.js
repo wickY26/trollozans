@@ -96,7 +96,7 @@ exports.delete = function (req, res) {
  * List of Poems
  */
 exports.list = function (req, res) {
-	Poem.find().sort('-created').populate('author').exec(function (err, poems) {
+	Poem.find().sort('-created').populate('author', 'displayName').exec(function (err, poems) {
 		if (err) {
 			return res.send(400, {
 				message: getErrorMessage(err)
@@ -111,7 +111,7 @@ exports.list = function (req, res) {
  * Poem middleware
  */
 exports.poemByID = function (req, res, next, id) {
-	Poem.findById(id).populate('author').exec(function (err, poem) {
+	Poem.findById(id).populate('author', 'displayName').exec(function (err, poem) {
 		if (err) return next(err);
 		if (!poem) return next(new Error('Failed to load Poem ' + id));
 		req.poem = poem;

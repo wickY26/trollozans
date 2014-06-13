@@ -1,48 +1,52 @@
 <section data-ng-controller="TopicsController" data-ng-init="findOne()">
-    <div class="page-header">
-        <h1>Edit Topic</h1>
-    </div>
-    <div class="col-md-6">
+    <div class="col-sm-6">
+        <div class="page-header">
+            <h1>Edit Topic</h1>
+        </div>
         <form class="form-horizontal" data-ng-submit="update()" novalidate>
             <fieldset>
                 <div class="form-group">
-                    <label class="control-label" for="title">Title</label>
-                    <div class="controls">
+                    <label class="col-sm-3 control-label" for="title">Title</label>
+                    <div class="col-sm-9">
                         <input type="text" data-ng-model="topic.title" id="title" class="form-control" placeholder="Title" required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="description">Description</label>
-                    <div class="controls">
+                    <label class="col-sm-3 control-label" for="description">Description</label>
+                    <div class="col-sm-9">
                         <textarea data-ng-model="topic.description" id="description" class="form-control" cols="12" rows="4" placeholder="Description"></textarea>
                     </div>
                 </div>
                 <div class="form-group" data-ng-init="findTags()">
-                    <label class="control-label" for="tags">Tag</label>
-                    <div class="controls">
-                        <select ui-select2 data-ng-model="topic.tags[0]" id="tags" class="form-control" required>
+                    <label class="col-sm-3 control-label" for="tags">Tag</label>
+                    <div class="col-sm-9">
+                        <select ui-select2 data-ng-model="topic.tags" id="tags" class="form-control" multiple required>
                             <option value="{{tag._id}}" ng-repeat="tag in tags">{{tag.title}}</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="content_type">Content Type</label>
-                    <div class="controls">
+                    <label class="col-sm-3 control-label" for="content_type">Content Type</label>
+                    <div class="col-sm-9">
                         <select ui-select2 data-ng-model="topic.content.type" id="content_type" class="form-control" required>
                             <option value="image">Image</option>
                             <option value="youtube">Youtube</option>
                             <option value="dailymotion">Dailymotion</option>
+                            <option value="vimeo">Vimeo</option>
+                            <option value="izlesene">izlesene</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="content_url">Content Url</label>
-                    <div class="controls">
-                        <textarea data-ng-model="topic.content.url" id="content_url" class="form-control" placeholder="Content Url" cols="12" rows="4" required></textarea>
+                    <label class="col-sm-3 control-label" for="content_url">Content Url</label>
+                    <div class="col-sm-9">
+                        <input type="text" data-ng-model="topic.content.url" id="content_url" class="form-control" placeholder="Content Url" required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <input type="submit" value="Update" class="btn btn-default">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <input type="submit" value="Update" class="btn btn-primary">
+                    </div>
                 </div>
                 <div data-ng-show="error" class="text-danger">
                     <strong data-ng-bind="error"></strong>
@@ -50,12 +54,10 @@
             </fieldset>
         </form>
     </div>
-    <div class="col-md-6">
-        <div class="form-group">
-            <label class="control-label" for="content">Content</label>
-            <div class="controls">
-                <div bind-unsafe-html="topic.content.url"></div>
-            </div>
+    <div class="col-sm-6">
+        <div class="page-header">
+            <h1>Preview</h1>
         </div>
+        <div content-wrapper type="topic.content.type" reference="topic.content.url" editable></div>
     </div>
 </section>

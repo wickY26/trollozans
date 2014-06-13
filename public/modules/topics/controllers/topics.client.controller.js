@@ -11,7 +11,7 @@ angular.module('topics').controller('TopicsController', ['$scope', '$stateParams
 			var topic = new Topics({
 				title: this.title,
 				content: this.content,
-				tags: [this.tag],
+				tags: this.topicTags,
 				description: this.description
 			});
 
@@ -24,8 +24,8 @@ angular.module('topics').controller('TopicsController', ['$scope', '$stateParams
 
 			// Clear form fields
 			this.title = '';
-			this.content = {};
-			this.tag = '';
+			this.content = '';
+			this.topicTags = '';
 			this.description = '';
 		};
 

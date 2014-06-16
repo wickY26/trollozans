@@ -1,0 +1,79 @@
+trollozans API (version 0.0.1):
+  topic API (version 0.0.1):
+    topic API is responsible for 'topic' operations...
+   createTopic:
+    □ validate Topic
+      for now this can be an empty function...
+    □ create Topic
+   updateTopic:
+    □ validate Topic
+      for now this can be an empty function...
+    □ update Topic
+   deleteTopic:
+    □ delete Topic
+      delete topic with given _id...
+   findTopics:
+    □ find Topics
+      can take a query parameter for filter out the result...
+  poem API (version 0.0.1):
+    poem API is responsible for 'poem' operations...
+   createPoem:
+    □ validate Poem
+      for now this can be an empty function...
+    □ create Poem
+   updatePoem:
+    □ validate Poem
+      for now this can be an empty function...
+    □ update Poem
+   deletePoem:
+    □ delete Poem
+      delete poem with given _id...
+   findPoems:
+    □ find Poems
+      can take a query parameter for filter out the result...
+  tag API (version 0.0.1):
+    tag API is responsible for 'tag' operations...
+   createTag:
+    □ validate Tag
+      for now this can be an empty function...
+    □ create Tag
+   updateTag:
+    □ validate Tag
+      for now this can be an empty function...
+    □ update Tag
+   deleteTag:
+    □ delete Tag
+      delete tag with given _id...
+   findTags:
+    □ find Tags
+      can take a query parameter for filter out the result...
+--- ✄ -----------------------
+trollozans Front-End (version 0.0.1):
+  topic views (version 0.0.1):
+   □ create page
+     roles: admin
+   □ edit page
+     roles: admin
+   □ view page
+     roles: admin
+   □ list page
+     roles: admin
+  poem views (version 0.0.1):
+   □ create page
+     roles: admin
+   □ edit page
+     roles: admin
+   □ view page
+     roles: admin
+   □ list page
+     roles: admin
+  tag views (version 0.0.1):
+   □ create page
+     roles: admin
+   □ edit page
+     roles: admin
+   □ view page
+     roles: admin
+   □ list page
+     roles: admin
+--- ✄ -----------------------

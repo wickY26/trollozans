@@ -2,16 +2,23 @@
 	<div class="page-header">
 		<h1 data-ng-bind="topic.title"></h1>
 	</div>
-	<div class="pull-right">
-		<a class="btn btn-primary" href="/#!/topics/{{topic._id}}/edit">
-			<i class="glyphicon glyphicon-edit"></i>
-		</a>
-		<a class="btn btn-primary" data-ng-click="remove(topic)">
-			<i class="glyphicon glyphicon-trash"></i>
-		</a>
+	<div class="row">
+	    <div class="col-sm-6">
+	        <pre>{{topic | json}}</pre>
+	        <small>
+	        	<em class="text-muted">Posted on <span data-ng-bind="topic.created | date:'mediumDate'"></span> by <span data-ng-bind="topic.creator.displayName"></span></em>
+	        </small>
+	        <div class="pull-right">
+	        	<a class="btn btn-primary" href="/#!/topics/{{topic._id}}/edit">
+	        		<i class="glyphicon glyphicon-edit"></i>
+	        	</a>
+	        	<a class="btn btn-primary" data-ng-click="remove(topic)">
+	        		<i class="glyphicon glyphicon-trash"></i>
+	        	</a>
+	        </div>
+	    </div>
+	    <div class="col-sm-6">
+	        <div content-wrapper type="topic.content.type" reference="topic.content.url"></div>
+	    </div>
 	</div>
-	<small>
-		<em class="text-muted">Posted on <span data-ng-bind="topic.created | date:'mediumDate'"></span> by <span data-ng-bind="topic.creator.displayName"></span></em>
-	</small>
-	<p class="lead" data-ng-bind="topic.description"></p>
 </section>

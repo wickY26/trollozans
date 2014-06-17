@@ -31,19 +31,9 @@ angular.module('poems').controller('PoemsController', ['$scope', '$stateParams',
 
 		// Remove existing Poem
 		$scope.remove = function (poem) {
-			if (poem) {
-				poem.$remove();
-
-				for (var i in $scope.poems) {
-					if ($scope.poems[i] === poem) {
-						$scope.poems.splice(i, 1);
-					}
-				}
-			} else {
-				$scope.poem.$remove(function () {
-					$location.path('poems');
-				});
-			}
+			$scope.poem.$remove(function () {
+				$location.path('poems');
+			});
 		};
 
 		// Update existing Poem

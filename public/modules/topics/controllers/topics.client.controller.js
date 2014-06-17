@@ -31,19 +31,9 @@ angular.module('topics').controller('TopicsController', ['$scope', '$stateParams
 
 		// Remove existing Topic
 		$scope.remove = function (topic) {
-			if (topic) {
-				topic.$remove();
-
-				for (var i in $scope.topics) {
-					if ($scope.topics[i] === topic) {
-						$scope.topics.splice(i, 1);
-					}
-				}
-			} else {
-				$scope.topic.$remove(function () {
-					$location.path('topics');
-				});
-			}
+			$scope.topic.$remove(function () {
+				$location.path('topics');
+			});
 		};
 
 		// Update existing Topic

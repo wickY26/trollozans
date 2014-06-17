@@ -27,19 +27,9 @@ angular.module('tags').controller('TagsController', ['$scope', '$stateParams', '
 
 		// Remove existing Tag
 		$scope.remove = function (tag) {
-			if (tag) {
-				tag.$remove();
-
-				for (var i in $scope.tags) {
-					if ($scope.tags[i] === tag) {
-						$scope.tags.splice(i, 1);
-					}
-				}
-			} else {
-				$scope.tag.$remove(function () {
-					$location.path('tags');
-				});
-			}
+			$scope.tag.$remove(function () {
+				$location.path('tags');
+			});
 		};
 
 		// Update existing Tag

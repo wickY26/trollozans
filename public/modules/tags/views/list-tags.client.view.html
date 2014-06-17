@@ -4,13 +4,10 @@
     </div>
     <div class="list-group">
         <a data-ng-repeat="tag in tags" data-ng-href="#!/tags/{{tag._id}}" class="list-group-item">
+            <h2 class="list-group-item-heading" data-ng-bind="tag.title"></h2>
 			<small class="list-group-item-text">
-				Posted on
-				<span data-ng-bind="tag.created | date:'medium'"></span>
-				by
-				<span data-ng-bind="tag.creator.displayName"></span>
+                Posted on <span data-ng-bind="tag.created | date:'medium'"></span> by <span data-ng-bind="tag.creator.displayName"></span>
 			</small>
-			<h4 class="list-group-item-heading" data-ng-bind="tag.title"></h4>
         </a>
     </div>
     <div class="alert alert-warning text-center" data-ng-hide="!tags.$resolved || tags.length">

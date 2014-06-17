@@ -68,12 +68,19 @@ var TopicSchema = new Schema({
 			required: 'Please select a Content type',
 		},
 		/**
-		 * URL of Content
+		 * Reference of Content
 		 * @type {String}
 		 */
-		url: {
+		reference: {
 			type: String,
-			required: 'Please fill Content url'
+			required: 'Please fill Content reference'
+		},
+		/**
+		 * Thumbnail URL of content
+		 * @type {Object}
+		 */
+		thumbnail: {
+			type: String
 		}
 	},
 	/**

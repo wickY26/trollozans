@@ -1,9 +1,9 @@
 <section data-ng-controller="PoemsController" data-ng-init="findOne()">
-    <div class="page-header">
-        <h1>Edit Poem</h1>
-    </div>
-    <div class="col-md-12">
-        <form class="form-horizontal" data-ng-submit="update()" data-novalidate>
+    <div class="col-md-6">
+        <div class="page-header">
+            <h1>Edit Poem</h1>
+        </div>
+        <form data-ng-submit="update()" data-novalidate>
             <fieldset>
                 <div class="form-group">
                     <label class="control-label" for="title">Title</label>
@@ -14,7 +14,7 @@
                 <div class="form-group">
                     <label class="control-label" for="content">Content</label>
                     <div class="controls">
-                        <textarea data-ng-model="poem.content" id="content" class="form-control" placeholder="Content" cols="12" rows="4" required></textarea>
+                        <textarea data-ng-model="poem.content" id="content" class="form-control" placeholder="Content" rows="4" required></textarea>
                     </div>
                 </div>
                 <div class="form-group" data-ng-init="findTopics()">
@@ -28,13 +28,13 @@
                 <div class="form-group" data-ng-init="findTags()">
                     <label class="control-label" for="tags">Tag</label>
                     <div class="controls">
-                        <select ui-select2 data-ng-model="poem.tags[0]" id="tags" class="form-control">
+                        <select ui-select2 data-ng-model="poem.tags" id="tags" class="form-control" multiple>
                             <option data-ng-value="tag._id" data-ng-repeat="tag in tags">{{tag.title}}</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <input type="submit" value="Update" class="btn btn-default">
+                    <input type="submit" value="Update" class="btn btn-primary">
                 </div>
 				<div data-ng-show="error" class="text-danger">
 					<strong data-ng-bind="error"></strong>

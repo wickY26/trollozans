@@ -1,9 +1,9 @@
 <section data-ng-controller="PoemsController">
-    <div class="page-header">
-        <h1>New Poem</h1>
-    </div>
-    <div class="col-md-12">
-        <form class="form-horizontal" data-ng-submit="create()" novalidate>
+    <div class="col-md-6">
+        <div class="page-header">
+            <h1>New Poem</h1>
+        </div>
+        <form data-ng-submit="create()" novalidate>
             <fieldset>
                 <div class="form-group">
                     <label class="control-label" for="title">Title</label>
@@ -14,13 +14,13 @@
                 <div class="form-group">
                     <label class="control-label" for="content">Content</label>
                     <div class="controls">
-                        <textarea data-ng-model="content" id="content" class="form-control" placeholder="Content" cols="12" rows="4" required></textarea>
+                        <textarea data-ng-model="content" id="content" class="form-control" placeholder="Content" rows="4" required></textarea>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="topic">Topic</label>
                     <div class="controls">
-                        <select data-ng-model="topic" id="topic" class="form-control" data-ng-init="findTopics()" required>
+                        <select ui-select2 data-ng-model="topic" id="topic" class="form-control" data-ng-init="findTopics()" required>
                             <option ng-value="topic._id" ng-repeat="topic in topics">{{topic.title}}</option>
                         </select>
                     </div>
@@ -28,18 +28,18 @@
                 <div class="form-group">
                     <label class="control-label" for="tags">Tag</label>
                     <div class="controls">
-                        <select data-ng-model="tag" id="tags" class="form-control" data-ng-init="findTags()" required>
+                        <select ui-select2 data-ng-model="tag" id="tags" class="form-control" data-ng-init="findTags()" multiple required>
                             <option ng-value="tag._id" ng-repeat="tag in tags">{{tag.title}}</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <input type="submit" class="btn btn-default">
+                    <input type="submit" class="btn btn-primary">
                 </div>
-				<div data-ng-show="error" class="text-danger">
-					<strong data-ng-bind="error"></strong>
-				</div>
+                <div data-ng-show="error" class="text-danger">
+                    <strong data-ng-bind="error"></strong>
+                </div>
             </fieldset>
         </form>
-    </div>
+    </div> 
 </section>

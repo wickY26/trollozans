@@ -12,7 +12,7 @@
 	height: 100%;
 }
 
-img {
+.imgWrapper {
     width: 100%;
     width: auto\9; /* ie8 */
     height: auto;

@@ -29,14 +29,6 @@ var TopicSchema = new Schema({
 		required: 'Please fill Topic description'
 	},
 	/**
-	 * Like Count of Topic
-	 * @type {Number}
-	 */
-	likeCount: {
-		type: Number,
-		default: 0
-	},
-	/**
 	 * Popularity of Topic
 	 * @type {Number}
 	 */
@@ -44,14 +36,6 @@ var TopicSchema = new Schema({
 		type: Number,
 		default: 0
 	},
-	/**
-	 * Tags of Topic
-	 * @type {Array}
-	 */
-	tags: [{
-		type: Schema.ObjectId,
-		ref: 'Tag'
-	}],
 	/**
 	 * Content of Topic
 	 * @type {Object}

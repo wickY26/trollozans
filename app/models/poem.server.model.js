@@ -11,30 +11,12 @@ var mongoose = require('mongoose'),
  */
 var PoemSchema = new Schema({
 	/**
-	 * Title of Poem
-	 * @type {String}
-	 */
-	title: {
-		type: String,
-		default: '',
-		required: 'Please fill Poem title',
-		trim: true
-	},
-	/**
 	 * Content of Poem
 	 * @type {String}
 	 */
 	content: {
 		type: String,
 		required: 'Please fill Poem content'
-	},
-	/**
-	 * Like Count of Poem
-	 * @type {Number}
-	 */
-	likeCount: {
-		type: Number,
-		default: 0
 	},
 	/**
 	 * Topic of Poem
@@ -46,13 +28,13 @@ var PoemSchema = new Schema({
 		required: 'Please fill Poem topic'
 	},
 	/**
-	 * Tags of Poem
-	 * @type {Array}
+	 * Like Count of Poem
+	 * @type {Number}
 	 */
-	tags: [{
-		type: Schema.ObjectId,
-		ref: 'Tag'
-	}],
+	likeCount: {
+		type: Number,
+		default: 0
+	},
 	/**
 	 * Approve flag of Poem
 	 * @type {Boolean}

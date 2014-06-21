@@ -25,35 +25,28 @@ angular.module('topics').directive('bindUnsafeHtml', ['$compile',
 	}
 ]);
 
-/*angular.module('topics').directive('contentWrapper', ['$compile',
-	function ($compile) {
-		// templates
-		var youtubeTemplate = '<iframe src="//www.youtube-nocookie.com/embed/{{}}?rel=0" frameborder="0" allowfullscreen></iframe>';
+angular.module('topics').directive('tagList', function ($timeout) {
+	return {
+		restrict: 'A',
+		scope: {
+			tagList: '='
+		},
+		link: function (scope, element, attrs, controller) {
 
-		return function (scope, element, attrs) {
-			var contentType = attrs.contenType || null;
-			var contentCode = attrs.contentCode || null;
-
-			scope.$watch(
-				function (scope) {
-					// watch the 'bindUnsafeHtml' expression for changes
-					return scope.$eval(attrs.bindUnsafeHtml);
-				},
-				function (value) {
-					// when the 'bindUnsafeHtml' expression changes
-					// assign it into the current DOM
-					element.html(value);
-
-					// compile the new DOM and link it to the current
-					// scope.
-					// NOTE: we only compile .childNodes so that
-					// we don't get into infinite loop compiling ourselves
-					$compile(element.contents())(scope);
+			scope.$watch('tagList', function (value) {
+				if (value !== undefined) {
+					element.select2('val', value);
 				}
-			);
-		};
-	}
-]);*/
+			});
+
+			element.bind('change', function () {
+				var value = element.select2('val');
+				scope.tagList = value;
+				console.log(scope.tagList);
+			});
+		}
+	};
+});
 
 angular.module('topics').directive('contentWrapper', ['$compile',
 	function ($compile) {

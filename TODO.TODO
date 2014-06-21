@@ -49,31 +49,44 @@ trollozans API (version 0.0.1):
       can take a query parameter for filter out the result...
 --- ✄ -----------------------
 trollozans Front-End (version 0.0.1):
-  topic views (version 0.0.1):
-   √ create page @started(14-06-16 13:50 by wickY26) @done (14-06-16 13:50 by wickY26) @lasted(0:00:00)
-     roles: admin
-   □ edit page
-     roles: admin
-   □ view page
-     roles: admin
-   □ list page
-     roles: admin
-  poem views (version 0.0.1):
-   □ create page
-     roles: admin
-   □ edit page
-     roles: admin
-   □ view page
-     roles: admin
-   □ list page
-     roles: admin
-  tag views (version 0.0.1):
-   □ create page
-     roles: admin
-   □ edit page
-     roles: admin
-   □ view page
-     roles: admin
-   □ list page
-     roles: admin
---- ✄ -----------------------
+  core:
+    core services (version 0.0.1):
+     √ constants service @started(14-06-17 10:07 by wickY26) @done (14-06-17 10:45 by wickY26) @lasted(0:38:00)
+       this service is responsible for getting and setting constants
+    core config (version 0.0.1):
+     √ select2 config @started(14-06-17 09:55 by wickY26) @done (14-06-17 10:45 by wickY26) @lasted(0:50:00)
+       select2 global config
+  --- ✄ -----------------------
+  topic:
+    topic views (version 0.0.1):
+     √ create page @started(14-06-16 13:50 by wickY26) @done (14-06-16 13:50 by wickY26) @lasted(0:00:00)
+       roles: admin
+     √ edit page @started(14-06-16 23:06 by wickY26) @done (14-06-16 23:07 by wickY26) @lasted(0:01:00)
+       roles: admin
+     √ view page @started(14-06-16 23:07 by wickY26) @done (14-06-16 23:07 by wickY26) @lasted(0:00:00)
+       roles: admin
+     √ list page @started(14-06-16 23:07 by wickY26) @done (14-06-16 23:07 by wickY26) @lasted(0:00:00)
+       roles: admin
+  --- ✄ -----------------------
+  poem:
+    poem views (version 0.0.1):
+     √ create page @started(14-06-16 23:30 by wickY26) @done (14-06-16 23:30 by wickY26) @lasted(0:00:00)
+       roles: admin
+     √ edit page @started(14-06-16 23:30 by wickY26) @done (14-06-16 23:30 by wickY26) @lasted(0:00:00)
+       roles: admin
+     √ view page @started(14-06-16 23:30 by wickY26) @done (14-06-16 23:30 by wickY26) @lasted(0:00:00)
+       roles: admin
+     √ list page @started(14-06-16 23:30 by wickY26) @done (14-06-16 23:30 by wickY26) @lasted(0:00:00)
+       roles: admin
+  --- ✄ -----------------------
+  tag:
+    tag views (version 0.0.1):
+     √ create page @started(14-06-16 23:14 by wickY26) @done (14-06-16 23:14 by wickY26) @lasted(0:00:00)
+       roles: admin
+     √ edit page @started(14-06-16 23:14 by wickY26) @done (14-06-16 23:14 by wickY26) @lasted(0:00:00)
+       roles: admin
+     √ view page @started(14-06-16 23:14 by wickY26) @done (14-06-16 23:14 by wickY26) @lasted(0:00:00)
+       roles: admin
+     √ list page @started(14-06-16 23:14 by wickY26) @done (14-06-16 23:14 by wickY26) @lasted(0:00:00)
+       roles: admin
+  --- ✄ -----------------------

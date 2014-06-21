@@ -111,7 +111,7 @@ exports.list = function (req, res) {
  * Topic middleware
  */
 exports.topicByID = function (req, res, next, id) {
-	Topic.findById(id).populate('creator', 'displayName').exec(function (err, topic) {
+	Topic.findById(id).populate('creator', 'displayName').populate('tags', 'title').exec(function (err, topic) {
 		if (err) return next(err);
 		if (!topic) return next(new Error('Failed to load Topic ' + id));
 		req.topic = topic;

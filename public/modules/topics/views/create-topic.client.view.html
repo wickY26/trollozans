@@ -4,43 +4,37 @@
             <h1>New Topic</h1>
         </div>
         <form data-ng-submit="create()" novalidate>
+        <pre>{{topic | json}}</pre>
             <fieldset>
                 <div class="form-group">
                     <label control-label" for="title">Title</label>
                     <div>
-                        <input type="text" data-ng-model="title" id="title" class="form-control" placeholder="Title" required>
+                        <input type="text" data-ng-model="topic.title" id="title" class="form-control" placeholder="Title" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label control-label" for="description">Description</label>
                     <div>
-                        <textarea data-ng-model="description" id="description" class="form-control" rows="4" placeholder="Description"></textarea>
+                        <textarea data-ng-model="topic.description" id="description" class="form-control" rows="4" placeholder="Description"></textarea>
                     </div>
                 </div>
                 <div class="form-group" data-ng-init="findTags()">
                     <label control-label" for="tags">Tag</label>
                     <div>
-                        <select ui-select2 data-ng-model="topicTags" id="tags" class="form-control" multiple required>
-                            <option value="{{tag._id}}" ng-repeat="tag in tags">{{tag.title}}</option>
-                        </select>
+                        <input type="hidden" ui-select2="tagOptions" tag-list data-ng-model="topic.tags" id="tags" class="form-control">
                     </div>
                 </div>
                 <div class="form-group">
                     <label control-label" for="content_type">Content Type</label>
                     <div>
-                        <select ui-select2 data-ng-model="content.type" id="content_type" class="form-control" required>
-                            <option value="image">Image</option>
-                            <option value="youtube">Youtube</option>
-                            <option value="dailymotion">Dailymotion</option>
-                            <option value="vimeo">Vimeo</option>
-                            <option value="izlesene">izlesene</option>
-                        </select>
+                        <input type="hidden" ui-select2="contentTypeOptions" tag-list="test" data-ng-model="topic.content.type" id="content_type" class="form-control">
+                        {{test}}
                     </div>
                 </div>
                 <div class="form-group">
                     <label control-label" for="content_reference">Content Reference</label>
                     <div>
-                        <input type="text" data-ng-model="content.reference" id="content_reference" class="form-control" placeholder="Content Reference" required>
+                        <input type="text" data-ng-model="topic.content.reference" id="content_reference" class="form-control" placeholder="Content Reference" required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -54,10 +48,10 @@
             </fieldset>
         </form>
     </div>
-    <div class="col-sm-6" ng-if="content.type && content.reference">
+    <div class="col-sm-6" ng-if="topic.content.type && topic.content.reference">
         <div class="page-header">
             <h1>Preview</h1>
         </div>
-        <div content-wrapper type="content.type" reference="content.reference" editable></div>
+        <div content-wrapper type="topic.content.type" reference="topic.content.reference" editable></div>
     </div>
 </section>

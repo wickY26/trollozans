@@ -20,8 +20,9 @@ module.exports = {
 			],
 			js: [
 				'public/lib/jquery/dist/jquery.js',
-				'public/lib/select2/select2.js',
 				'public/lib/angular/angular.js',
+				'public/lib/select2/select2.js',
+				'public/lib/lodash/dist/lodash.js',
 				'public/lib/angular-resource/angular-resource.js',
 				'public/lib/angular-cookies/angular-cookies.js',
 				'public/lib/angular-animate/angular-animate.js',
@@ -30,7 +31,8 @@ module.exports = {
 				'public/lib/angular-ui-router/release/angular-ui-router.js',
 				'public/lib/angular-ui-utils/ui-utils.js',
 				'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
-				'public/lib/angular-ui-select2/src/select2.js'
+				'public/lib/angular-ui-select2/src/select2.js',
+				'public/lib/restangular/dist/restangular.js'
 			]
 		},
 		css: [

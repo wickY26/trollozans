@@ -11,7 +11,7 @@
                         <blockquote class="bg-info">
                           <p data-ng-bind="topic.description"></p>
                         </blockquote>
-                        <form data-ng-submit="createPoem(topic._id)" novalidate>
+                        <form data-ng-submit="createPoem(topic._id)" data-ng-show="authentication.user" novalidate>
                             <fieldset>
                                 <div class="form-group">
                                     <label class="control-label" for="description">Your Poem</label>
@@ -60,6 +60,7 @@
             </div>
         </div>
         <div class="col-md-3">
+            <br><br>
             <div class="imgWrapper">
                 <img src="http://dummyimage.com/800x600/4d494d/686a82.gif&text=placeholder+image" alt="placeholder+image">
             </div>

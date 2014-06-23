@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function(app) {
+module.exports = function (app) {
 	var users = require('../../app/controllers/users');
 	var topics = require('../../app/controllers/topics');
 
@@ -13,6 +13,10 @@ module.exports = function(app) {
 		.get(topics.read)
 		.put(users.requiresLogin, topics.hasAuthorization, topics.update)
 		.delete(users.requiresLogin, topics.hasAuthorization, topics.delete);
+
+	app.route('/topics/poems/:topicId')
+		.get(topics.getPoems)
+		.post(topics.createPoem);
 
 	// Finish by binding the Topic middleware
 	app.param('topicId', topics.topicByID);

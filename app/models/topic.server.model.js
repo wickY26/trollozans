@@ -58,15 +58,16 @@ var TopicSchema = new Schema({
 		reference: {
 			type: String,
 			required: 'Please fill Content reference'
-		},
-		/**
-		 * Thumbnail URL of content
-		 * @type {Object}
-		 */
-		thumbnail: {
-			type: String
 		}
 	},
+	/**
+	 * Poems of Topic
+	 * @type {Object}
+	 */
+	poems: [{
+		type: Schema.ObjectId,
+		ref: 'Poem'
+	}],
 	/**
 	 * Created date of Topic
 	 * @type {Date}

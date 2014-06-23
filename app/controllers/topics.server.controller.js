@@ -5,6 +5,7 @@
  */
 var mongoose = require('mongoose'),
 	Topic = mongoose.model('Topic'),
+	Poem = mongoose.model('Poem'),
 	_ = require('lodash');
 
 /**
@@ -107,11 +108,50 @@ exports.list = function (req, res) {
 	});
 };
 
+exports.getPoems = function (req, res) {
+	Topic.findById(req.topic._id).populate('creator', 'displayName').populate('poems').exec(function (err, topic) {
+		if (err) {
+			return res.send(400, {
+				message: getErrorMessage(err)
+			});
+		} else {
+			res.jsonp(topic);
+		}
+	});
+};
+
+exports.createPoem = function (req, res) {
+	var poem = new Poem(req.body);
+	poem.author = req.user;
+
+	poem.save(function (err, poem) {
+		if (err) {
+			return res.send(400, {
+				message: getErrorMessage(err)
+			});
+		} else {
+			console.log('poem', poem);
+			var topic = req.topic;
+			topic.poems.push(poem);
+
+			topic.save(function (err, topic) {
+				if (err) {
+					return res.send(400, {
+						message: getErrorMessage(err)
+					});
+				} else {
+					res.jsonp(topic);
+				}
+			});
+		}
+	});
+};
+
 /**
  * Topic middleware
  */
 exports.topicByID = function (req, res, next, id) {
-	Topic.findById(id).populate('creator', 'displayName').populate('tags', 'title').exec(function (err, topic) {
+	Topic.findById(id).populate('creator', 'displayName').exec(function (err, topic) {
 		if (err) return next(err);
 		if (!topic) return next(new Error('Failed to load Topic ' + id));
 		req.topic = topic;

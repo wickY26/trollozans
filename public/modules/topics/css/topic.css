@@ -3,6 +3,7 @@
 	padding-bottom: 56.25%; /* 16:9 */
 	padding-top: 25px;
 	height: 0;
+	margin-bottom: 10px;
 }
 .videoWrapper iframe {
 	position: absolute;
@@ -12,8 +13,9 @@
 	height: 100%;
 }
 
-.imgWrapper {
+.imgWrapper img{
     width: 100%;
     width: auto\9; /* ie8 */
     height: auto;
+    margin-bottom: 10px;
 }

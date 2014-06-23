@@ -7,5 +7,9 @@ angular.module('core').config(['RestangularProvider',
 		RestangularProvider.setRestangularFields({
 			id: '_id'
 		});
+		// using JSonp instead of the regular GET
+		RestangularProvider.setDefaultRequestParams('jsonp', {
+			callback: 'JSON_CALLBACK'
+		});
 	}
 ]);

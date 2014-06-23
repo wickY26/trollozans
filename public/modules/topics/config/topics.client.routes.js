@@ -5,6 +5,10 @@ angular.module('topics').config(['$stateProvider',
 	function($stateProvider) {
 		// Topics state routing
 		$stateProvider.
+		state('main-topics', {
+			url: '/main-topics',
+			templateUrl: 'modules/topics/views/main-topics.client.view.html'
+		}).
 		state('listTopics', {
 			url: '/topics',
 			templateUrl: 'modules/topics/views/list-topics.client.view.html'

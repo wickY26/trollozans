@@ -7,5 +7,8 @@ angular.module('topics').run(['Menus',
 		Menus.addMenuItem('topbar', 'Topics', 'topics', 'dropdown', '/topics(/create)?');
 		Menus.addSubMenuItem('topbar', 'topics', 'List Topics', 'topics');
 		Menus.addSubMenuItem('topbar', 'topics', 'New Topic', 'topics/create');
+
+		// Set top bar menu items
+		Menus.addMenuItem('topbar', 'Topics', 'main-topics', 'button', '/main-topics');
 	}
 ]);

@@ -25,29 +25,6 @@ angular.module('topics').directive('bindUnsafeHtml', ['$compile',
 	}
 ]);
 
-angular.module('topics').directive('tagList', function ($timeout) {
-	return {
-		restrict: 'A',
-		scope: {
-			tagList: '='
-		},
-		link: function (scope, element, attrs, controller) {
-
-			scope.$watch('tagList', function (value) {
-				if (value !== undefined) {
-					element.select2('val', value);
-				}
-			});
-
-			element.bind('change', function () {
-				var value = element.select2('val');
-				scope.tagList = value;
-				console.log(scope.tagList);
-			});
-		}
-	};
-});
-
 angular.module('topics').directive('contentWrapper', ['$compile',
 	function ($compile) {
 		// get templates by type and reference
@@ -56,7 +33,7 @@ angular.module('topics').directive('contentWrapper', ['$compile',
 			if (type === 'dailymotion') return '<div class="videoWrapper"><iframe src="//www.dailymotion.com/embed/video/' + reference + '?logo=0&info=0" frameborder="0" allowfullscreen></iframe></div>';
 			if (type === 'vimeo') return '<div class="videoWrapper"><iframe src="//player.vimeo.com/video/' + reference + '?title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;color=999999" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>';
 			if (type === 'izlesene') return '<div class="videoWrapper"><iframe src="http://www.izlesene.com/embedplayer/' + reference + '" frameborder="0" allowfullscreen></iframe></div>';
-			if (type === 'image') return '<img ng-src="{{reference}}"/>';
+			if (type === 'image') return '<div class="imgWrapper"><img ng-src="{{reference}}"/></div>';
 		}
 		// Runs during compile
 		return {

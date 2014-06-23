@@ -14,27 +14,13 @@
                 <div class="form-group">
                     <label class="control-label" for="description">Description</label>
                     <div>
-                        <textarea data-ng-model="topic.description" id="description" class="form-control" cols="12" rows="4" placeholder="Description"></textarea>
-                    </div>
-                </div>
-                <div class="form-group" data-ng-init="findTags()">
-                    <label class="control-label" for="tags">Tag</label>
-                    <div>
-                        <select ui-select2 data-ng-model="topic.tags" id="tags" class="form-control" multiple required>
-                            <option value="{{tag._id}}" ng-repeat="tag in tags">{{tag.title}}</option>
-                        </select>
+                        <textarea data-ng-model="topic.description" id="description" class="form-control" rows="4" placeholder="Description"></textarea>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="content_type">Content Type</label>
                     <div>
-                        <select ui-select2 data-ng-model="topic.content.type" id="content_type" class="form-control" required>
-                            <option value="image">Image</option>
-                            <option value="youtube">Youtube</option>
-                            <option value="dailymotion">Dailymotion</option>
-                            <option value="vimeo">Vimeo</option>
-                            <option value="izlesene">izlesene</option>
-                        </select>
+                        <input type="hidden" data-ui-select2="contentTypeOptions" data-ng-model="topic.content.type" id="content_type" class="form-control">
                     </div>
                 </div>
                 <div class="form-group">
@@ -45,7 +31,7 @@
                 </div>
                 <div class="form-group">
                     <div>
-                        <input type="submit" value="Update" class="btn btn-primary">
+                        <input type="submit" class="btn btn-primary">
                     </div>
                 </div>
                 <div data-ng-show="error" class="text-danger">
@@ -58,6 +44,6 @@
         <div class="page-header">
             <h1>Preview</h1>
         </div>
-        <div content-wrapper type="topic.content.type" reference="topic.content.reference" editable></div>
+        <div data-content-wrapper data-type="topic.content.type.id" data-reference="topic.content.reference" data-editable></div>
     </div>
 </section>

@@ -1,60 +1,29 @@
-<section data-ng-controller="TopicsController" data-ng-init="find()">
+<section data-ng-controller="MainTopicsController" data-ng-init="findTopics()">
     <div class="row">
         <div class="col-md-9">
             <div class="panel" data-ng-repeat="topic in topics">
-                <h2><button class="btn btn-link" data-ng-click="setCurrentTopic($index)" data-ng-bind="topic.title"></button></h2>
+                <h2 data-ng-bind="topic.title"></h2>
                 <div class="row">
-                    <div class="col-sm-7">
+                    <div class="col-sm-6">
                         <div data-content-wrapper data-type="topic.content.type" data-reference="topic.content.reference"></div>
                     </div>
-                    <div class="col-md-5">
-                        <blockquote class="bg-info">
-                          <p data-ng-bind="topic.description"></p>
-                        </blockquote>
-                        <form data-ng-submit="createPoem(topic._id)" data-ng-show="authentication.user" novalidate>
-                            <fieldset>
-                                <div class="form-group">
-                                    <label class="control-label" for="description">Your Poem</label>
-                                    <div>
-                                        <textarea data-ng-model="poem.content" id="poem" class="form-control" rows="4" placeholder="Your Poem"></textarea>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div>
-                                        <input type="submit" class="btn btn-primary">
-                                    </div>
-                                </div>
-                                <div data-ng-show="error" class="text-danger">
-                                    <strong data-ng-bind="error"></strong>
-                                </div>
-                            </fieldset>
-                        </form>
-                    </div>
-                </div>
-                <div class="row" data-ng-if="$index == currentTopic" data-ng-init="findPoems($index)">
-                    <div class="col-sm-6">
+                    <div class="col-sm-6" data-ng-if="topic.poems.length">
                         <ul class="media-list">
-                            <li class="media bg-info" data-ng-repeat="poem in poems">
+                            <li class="media" data-ng-repeat="poem in topic.poems">
                                 <a class="pull-left" href="#">
-                                    <img class="media-object" src="http://dummyimage.com/64x64/4d494d/686a82.gif&text=placeholder+image" alt="placeholder+image">
+                                    <img class="media-object img-circle" src="http://dummyimage.com/64x64/4d494d/686a82.gif&text=placeholder+image" alt="placeholder+image">
                                 </a>
                                 <div class="media-body">
                                     <p data-ng-bind="poem.content"></p>
                                 </div>
                             </li>
                         </ul>
+                        <a data-ng-href="#!/topics/{{topic._id}}" class="btn btn-block btn-warning">Read More...</a>
                     </div>
-                    <div class="col-sm-6">
-                        <ul class="media-list">
-                            <li class="media bg-info" data-ng-repeat="poem in poems">
-                                <a class="pull-left" href="#">
-                                    <img class="media-object" src="http://dummyimage.com/64x64/4d494d/686a82.gif&text=placeholder+image" alt="placeholder+image">
-                                </a>
-                                <div class="media-body">
-                                    <p data-ng-bind="poem.content"></p>
-                                </div>
-                            </li>
-                        </ul>
+                    <div class="col-sm-6" data-ng-if="!topic.poems.length">
+                        <a data-ng-href="#!/topics/{{topic._id}}" class="btn btn-block btn-danger">
+                            No Poems yet, why don't you write one...
+                        </a>
                     </div>
                 </div>
             </div>
@@ -68,9 +37,5 @@
                 <img src="http://dummyimage.com/800x600/4d494d/686a82.gif&text=placeholder+image" alt="placeholder+image">
             </div>
         </div>
-    </div>
-
-    <div class="alert alert-warning text-center" data-ng-hide="!topics.$resolved || topics.length">
-        No Topics yet, why don't you <a href="/#!/topics/create">create one</a>?
     </div>
 </section>

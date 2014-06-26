@@ -14,7 +14,6 @@ module.exports = {
 		lib: {
 			css: [
 				'public/lib/bootstrap/dist/css/bootstrap.css',
-				'public/lib/bootstrap/dist/css/bootstrap-theme.css',
 				'public/lib/select2/select2.css',
 				'public/lib/select2-bootstrap-css/select2-bootstrap.css'
 			],

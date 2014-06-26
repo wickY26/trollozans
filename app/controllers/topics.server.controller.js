@@ -6,6 +6,7 @@
 var mongoose = require('mongoose'),
 	Topic = mongoose.model('Topic'),
 	Poem = mongoose.model('Poem'),
+	async = require('async'),
 	_ = require('lodash');
 
 /**
@@ -54,7 +55,20 @@ exports.create = function (req, res) {
  * Show the current Topic
  */
 exports.read = function (req, res) {
-	res.jsonp(req.topic);
+	var query = {
+		'topic': req.topic._id
+	};
+	Poem.find(query).sort('likeCount').populate('author', 'displayName').exec(function (err, poems) {
+		if (err) {
+			return res.send(400, {
+				message: getErrorMessage(err)
+			});
+		} else {
+			var response = req.topic._doc;
+			response.poems = poems;
+			res.jsonp(response);
+		}
+	});
 };
 
 /**
@@ -97,25 +111,46 @@ exports.delete = function (req, res) {
  * List of Topics
  */
 exports.list = function (req, res) {
+	var response = [];
 	Topic.find().sort('-created').populate('creator', 'displayName').exec(function (err, topics) {
 		if (err) {
 			return res.send(400, {
 				message: getErrorMessage(err)
 			});
 		} else {
-			res.jsonp(topics);
+			async.each(topics, function (topic, callback) {
+				var tmpTopic = topic._doc;
+				Poem.find({
+					'topic': topic._id
+				}).sort('likeCount').populate('author', 'displayName').limit(3).exec(function (err, poems) {
+					tmpTopic.poems = poems;
+					response.push(tmpTopic);
+					callback(err);
+				});
+			}, function (err) {
+				if (err) {
+					return res.send(400, {
+						message: getErrorMessage(err)
+					});
+				} else {
+					res.jsonp(response);
+				}
+			});
 		}
 	});
 };
 
 exports.getPoems = function (req, res) {
-	Topic.findById(req.topic._id).populate('creator', 'displayName').populate('poems').exec(function (err, topic) {
+	var query = {
+		'topic': req.topic._id
+	};
+	Poem.find(query).sort('likeCount').populate('author', 'displayName').exec(function (err, poems) {
 		if (err) {
 			return res.send(400, {
 				message: getErrorMessage(err)
 			});
 		} else {
-			res.jsonp(topic);
+			res.jsonp(poems);
 		}
 	});
 };

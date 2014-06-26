@@ -1,0 +1,49 @@
+<section data-ng-controller="DetailTopicController" data-ng-init="findTopic()">
+    <div class="page-header">
+        <h2 data-ng-bind="topic.title"></h2>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div data-content-wrapper data-type="topic.content.type" data-reference="topic.content.reference"></div>
+            <p data-ng-bind="topic.description"></p>
+            <form data-ng-submit="createPoem(topic._id)" data-ng-show="authentication.user" novalidate>
+                <fieldset>
+                    <div class="form-group">
+                        <label class="control-label" for="description">Your Poem</label>
+                        <div>
+                            <textarea data-ng-model="poem.content" id="poem" class="form-control" rows="4" placeholder="Your Poem"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div>
+                            <input type="submit" class="btn btn-primary">
+                        </div>
+                    </div>
+                    <div data-ng-show="error" class="text-danger">
+                        <strong data-ng-bind="error"></strong>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+        <div class="col-sm-6" data-ng-if="topic.poems.length" data-ng-init="findPoems()">
+            <ul class="media-list">
+                <li class="media" data-ng-repeat="poem in topic.poems">
+                    <a class="pull-left" href="#">
+                        <img class="media-object img-circle" src="http://dummyimage.com/64x64/4d494d/686a82.gif&text=placeholder+image" alt="placeholder+image">
+                    </a>
+                    <div class="media-body">
+                        <p data-ng-bind="poem.content"></p>
+                    </div>
+                </li>
+            </ul>
+            <div class="imgWrapper">
+                <img src="http://dummyimage.com/800x100/4d494d/686a82.gif&text=placeholder+image" alt="placeholder+image">
+            </div>
+        </div>
+        <div class="col-sm-6" data-ng-if="!topic.poems.length">
+            <a data-ng-href="#!/topics/{{topic._id}}" class="btn btn-block btn-danger">
+                No Poems yet, why don't you write one...
+            </a>
+        </div>
+    </div>
+</section>

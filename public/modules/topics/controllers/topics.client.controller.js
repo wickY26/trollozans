@@ -1,8 +1,8 @@
 'use strict';
 
 // Topics controller
-angular.module('topics').controller('TopicsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Topics', 'Constants',
-	function ($scope, $stateParams, $location, Authentication, Topics, Constants) {
+angular.module('topics').controller('TopicsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Topics', 'Poems', 'Constants',
+	function ($scope, $stateParams, $location, Authentication, Topics, Poems, Constants) {
 		$scope.authentication = Authentication;
 
 		// Create new Topic

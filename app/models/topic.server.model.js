@@ -61,14 +61,6 @@ var TopicSchema = new Schema({
 		}
 	},
 	/**
-	 * Poems of Topic
-	 * @type {Object}
-	 */
-	poems: [{
-		type: Schema.ObjectId,
-		ref: 'Poem'
-	}],
-	/**
 	 * Created date of Topic
 	 * @type {Date}
 	 */

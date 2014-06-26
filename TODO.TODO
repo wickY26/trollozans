@@ -31,23 +31,7 @@ trollozans API (version 0.0.1):
    findPoems:
     □ find Poems
       can take a query parameter for filter out the result...
-  tag API (version 0.0.1):
-    tag API is responsible for 'tag' operations...
-   createTag:
-    □ validate Tag
-      for now this can be an empty function...
-    □ create Tag
-   updateTag:
-    □ validate Tag
-      for now this can be an empty function...
-    □ update Tag
-   deleteTag:
-    □ delete Tag
-      delete tag with given _id...
-   findTags:
-    □ find Tags
-      can take a query parameter for filter out the result...
---- ✄ -----------------------
+  --- ✄ -----------------------
 trollozans Front-End (version 0.0.1):
   core:
     core services (version 0.0.1):
@@ -77,16 +61,5 @@ trollozans Front-End (version 0.0.1):
      √ view page @started(14-06-16 23:30 by wickY26) @done (14-06-16 23:30 by wickY26) @lasted(0:00:00)
        roles: admin
      √ list page @started(14-06-16 23:30 by wickY26) @done (14-06-16 23:30 by wickY26) @lasted(0:00:00)
-       roles: admin
-  --- ✄ -----------------------
-  tag:
-    tag views (version 0.0.1):
-     √ create page @started(14-06-16 23:14 by wickY26) @done (14-06-16 23:14 by wickY26) @lasted(0:00:00)
-       roles: admin
-     √ edit page @started(14-06-16 23:14 by wickY26) @done (14-06-16 23:14 by wickY26) @lasted(0:00:00)
-       roles: admin
-     √ view page @started(14-06-16 23:14 by wickY26) @done (14-06-16 23:14 by wickY26) @lasted(0:00:00)
-       roles: admin
-     √ list page @started(14-06-16 23:14 by wickY26) @done (14-06-16 23:14 by wickY26) @lasted(0:00:00)
        roles: admin
   --- ✄ -----------------------

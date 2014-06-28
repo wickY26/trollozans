@@ -143,9 +143,11 @@ module.exports = function(grunt) {
 
 	// Making grunt default to force in order not to break the project.
 	grunt.option('force', true);
+	process.env.NODE_ENV = grunt.option('env');
 
 	// A Task for loading the configuration object
 	grunt.task.registerTask('loadConfig', 'Task that loads the config into a grunt option.', function() {
+		
 		var init = require('./config/init')();
 		var config = require('./config/config');
 

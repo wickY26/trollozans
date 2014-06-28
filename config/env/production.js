@@ -30,23 +30,18 @@ module.exports = {
 		js: 'public/dist/application.min.js'
 	},
 	facebook: {
-		clientID: process.env.FACEBOOK_ID || 'APP_ID',
-		clientSecret: process.env.FACEBOOK_SECRET || 'APP_SECRET',
-		callbackURL: 'http://localhost:3000/auth/facebook/callback'
+		clientID: process.env.FACEBOOK_ID || '480284548773404',
+		clientSecret: process.env.FACEBOOK_SECRET || 'bb416739210cde331c3721b0c252fed8',
+		callbackURL: 'http://wwww.trollozans.com/auth/facebook/callback'
 	},
 	twitter: {
-		clientID: process.env.TWITTER_KEY || 'CONSUMER_KEY',
-		clientSecret: process.env.TWITTER_SECRET || 'CONSUMER_SECRET',
-		callbackURL: 'http://localhost:3000/auth/twitter/callback'
+		clientID: process.env.TWITTER_KEY || 'JvwRhM936hotZ3G7LqvapZZ0a',
+		clientSecret: process.env.TWITTER_SECRET || '1GWUkUk8ScNeyaR0zRQLqfXX7sK4YJRyQMMGTjYIylyFl3KgG9',
+		callbackURL: 'http://wwww.trollozans.com/auth/twitter/callback'
 	},
 	google: {
-		clientID: process.env.GOOGLE_ID || 'APP_ID',
-		clientSecret: process.env.GOOGLE_SECRET || 'APP_SECRET',
-		callbackURL: 'http://localhost:3000/auth/google/callback'
-	},
-	linkedin: {
-		clientID: process.env.LINKEDIN_ID || 'APP_ID',
-		clientSecret: process.env.LINKEDIN_SECRET || 'APP_SECRET',
-		callbackURL: 'http://localhost:3000/auth/linkedin/callback'
+		clientID: process.env.GOOGLE_ID || '114200178611-q0cblb6p832rmumgt5eo3k2dg1744afm.apps.googleusercontent.com',
+		clientSecret: process.env.GOOGLE_SECRET || 'hh7M_MSylCWtV4jNjx0P-5te',
+		callbackURL: 'http://wwww.trollozans.com/auth/google/callback'
 	}
 };

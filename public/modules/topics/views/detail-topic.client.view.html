@@ -11,7 +11,8 @@
                     <div class="form-group">
                         <label class="control-label" for="description">Your Poem</label>
                         <div>
-                            <textarea data-ng-model="poem.content" id="poem" class="form-control" rows="4" placeholder="Your Poem"></textarea>
+                            <textarea data-ng-model="poem.content" id="poem" class="form-control" rows="4" maxlength="250" placeholder="Your Poem"></textarea>
+                            <span>{{250 - poem.content.length}} left</span>
                         </div>
                     </div>
                     <div class="form-group">

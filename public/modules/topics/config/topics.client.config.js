@@ -9,6 +9,6 @@ angular.module('topics').run(['Menus',
 		Menus.addSubMenuItem('topbar', 'topics', 'New Topic', 'admin/topics/create');
 
 		// Set top bar menu items
-		Menus.addMenuItem('topbar', 'Topics', 'topics', 'button', '/topics');
+		Menus.addMenuItem('topbar', 'Topics', 'topics', 'button', '/topics', true, []);
 	}
 ]);

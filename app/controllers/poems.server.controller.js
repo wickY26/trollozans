@@ -123,8 +123,26 @@ exports.poemByID = function (req, res, next, id) {
  * Poem authorization middleware
  */
 exports.hasAuthorization = function (req, res, next) {
-	if (req.poem.author.id !== req.user.id) {
+	if (!_.contains(req.user.roles, 'admin') || req.poem.author.id !== req.user.id) {
 		return res.send(403, 'User is not authorized');
 	}
+	next();
+};
+
+/**
+ * Poem permission middleware
+ */
+exports.hasPermission = function (req, res, next) {
+	if (_.contains(req.user.roles, 'admin') || _.contains(req.user.roles, 'author')) {
+		next();
+	} else {
+		return res.send(401, 'User has no permission');
+	}
+};
+
+/**
+ * Poem validation middleware
+ */
+exports.validate = function (req, res, next) {
 	next();
 };

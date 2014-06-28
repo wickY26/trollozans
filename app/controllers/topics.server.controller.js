@@ -33,12 +33,11 @@ var getErrorMessage = function (err) {
 };
 
 /**
- * Create a Topic
+ * Save topic to db
+ * @param  {[type]} topic [description]
+ * @return {[type]}       [description]
  */
-exports.create = function (req, res) {
-	var topic = new Topic(req.body);
-	topic.creator = req.user;
-
+var save = function (topic, res) {
 	topic.save(function (err) {
 		if (err) {
 			return res.send(400, {
@@ -48,6 +47,15 @@ exports.create = function (req, res) {
 			res.jsonp(topic);
 		}
 	});
+};
+/**
+ * Create a Topic
+ */
+exports.create = function (req, res) {
+	var topic = new Topic(req.body);
+	topic.creator = req.user;
+
+	save(topic, res);
 };
 
 /**
@@ -65,15 +73,19 @@ exports.update = function (req, res) {
 
 	topic = _.extend(topic, req.body);
 
-	topic.save(function (err) {
-		if (err) {
-			return res.send(400, {
-				message: getErrorMessage(err)
-			});
-		} else {
-			res.jsonp(topic);
-		}
-	});
+	save(topic, res);
+};
+
+/**
+ * Push poem to topic.
+ */
+exports.pushPoem = function (req, res) {
+	var topic = req.topic;
+	var poem = req.poem;
+
+	topic.poems.push(poem);
+	save(topic, res);
+
 };
 
 /**
@@ -157,7 +169,7 @@ exports.hasPermission = function (req, res, next) {
 	if (_.contains(req.user.roles, 'admin') || _.contains(req.user.roles, 'author')) {
 		next();
 	} else {
-		return res.send(401, 'User has no permission');
+		return res.send(403, 'User has no permission');
 	}
 };
 

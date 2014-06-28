@@ -17,9 +17,7 @@ angular.module('topics').controller('DetailTopicController', ['$scope', '$stateP
 		// Create new Poem for Topic
 		$scope.createPoem = function () {
 			// set topic of poem
-			this.poem.topic = $stateParams.topicId;
-
-			Poems.post(this.poem).then(function (response) {
+			Topics.one('poems').all($stateParams.topicId).post(this.poem).then(function (response) {
 				console.log(response);
 			}, function (errorResponse) {
 				$scope.error = errorResponse.data.message;

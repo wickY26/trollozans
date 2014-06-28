@@ -8,7 +8,7 @@ module.exports = function (app) {
 	// Poems Routes
 	app.route('/poems/:topicId')
 		.get(poems.list)
-		.post(users.requiresLogin, poems.create);
+		.post(users.requiresLogin, poems.create,topics.pushPoem);
 
 	app.route('/poems/:topicId/:poemId')
 		.put(users.requiresLogin, poems.hasPermission, poems.hasAuthorization, poems.update)

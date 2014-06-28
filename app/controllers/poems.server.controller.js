@@ -34,19 +34,17 @@ var getErrorMessage = function (err) {
 /**
  * Create a Poem
  */
-exports.create = function (req, res) {
+exports.create = function (req, res, next) {
 	var poem = new Poem(req.body);
 	poem.author = req.user;
 
-	poem.save(function (err) {
-		if (err) {
-			return res.send(400, {
-				message: getErrorMessage(err)
-			});
-		} else {
-			res.jsonp(poem);
+	poem.save(function (err, poem) {
+		if (poem) {
+			req.poem = poem;
 		}
+		next(err);
 	});
+
 };
 
 /**

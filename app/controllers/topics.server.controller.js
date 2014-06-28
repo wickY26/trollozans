@@ -5,7 +5,6 @@
  */
 var mongoose = require('mongoose'),
 	Topic = mongoose.model('Topic'),
-	Poem = mongoose.model('Poem'),
 	async = require('async'),
 	_ = require('lodash');
 
@@ -55,20 +54,7 @@ exports.create = function (req, res) {
  * Show the current Topic
  */
 exports.read = function (req, res) {
-	var query = {
-		'topic': req.topic._id
-	};
-	Poem.find(query).sort('likeCount').populate('author', 'displayName').exec(function (err, poems) {
-		if (err) {
-			return res.send(400, {
-				message: getErrorMessage(err)
-			});
-		} else {
-			var response = req.topic._doc;
-			response.poems = poems;
-			res.jsonp(response);
-		}
-	});
+	res.jsonp(req.topic);
 };
 
 /**
@@ -111,95 +97,73 @@ exports.delete = function (req, res) {
  * List of Topics
  */
 exports.list = function (req, res) {
-	var response = [];
-	Topic.find().sort('-created').populate('creator', 'displayName').exec(function (err, topics) {
-		if (err) {
-			return res.send(400, {
-				message: getErrorMessage(err)
-			});
-		} else {
-			async.each(topics, function (topic, callback) {
-				var tmpTopic = topic._doc;
-				Poem.find({
-					'topic': topic._id
-				}).sort('likeCount').populate('author', 'displayName').limit(3).exec(function (err, poems) {
-					tmpTopic.poems = poems;
-					response.push(tmpTopic);
-					callback(err);
+	Topic.find().sort('-created')
+		.populate('creator', 'displayName')
+		.populate({
+			path: 'poems',
+			match: {
+				isApproved: true
+			},
+			sort: '-created',
+			options: {
+				limit: 3
+			}
+		}).exec(function (err, topics) {
+			if (err) {
+				return res.send(400, {
+					message: getErrorMessage(err)
 				});
-			}, function (err) {
-				if (err) {
-					return res.send(400, {
-						message: getErrorMessage(err)
-					});
-				} else {
-					res.jsonp(response);
-				}
-			});
-		}
-	});
-};
-
-exports.getPoems = function (req, res) {
-	var query = {
-		'topic': req.topic._id
-	};
-	Poem.find(query).sort('likeCount').populate('author', 'displayName').exec(function (err, poems) {
-		if (err) {
-			return res.send(400, {
-				message: getErrorMessage(err)
-			});
-		} else {
-			res.jsonp(poems);
-		}
-	});
-};
-
-exports.createPoem = function (req, res) {
-	var poem = new Poem(req.body);
-	poem.author = req.user;
-
-	poem.save(function (err, poem) {
-		if (err) {
-			return res.send(400, {
-				message: getErrorMessage(err)
-			});
-		} else {
-			console.log('poem', poem);
-			var topic = req.topic;
-			topic.poems.push(poem);
-
-			topic.save(function (err, topic) {
-				if (err) {
-					return res.send(400, {
-						message: getErrorMessage(err)
-					});
-				} else {
-					res.jsonp(topic);
-				}
-			});
-		}
-	});
+			} else {
+				res.jsonp(topics);
+			}
+		});
 };
 
 /**
  * Topic middleware
  */
 exports.topicByID = function (req, res, next, id) {
-	Topic.findById(id).populate('creator', 'displayName').exec(function (err, topic) {
-		if (err) return next(err);
-		if (!topic) return next(new Error('Failed to load Topic ' + id));
-		req.topic = topic;
-		next();
-	});
+	Topic.findById(id)
+		.populate('creator', 'displayName')
+		.populate({
+			path: 'poems',
+			match: {
+				isApproved: true
+			},
+			sort: '-created'
+		})
+		.exec(function (err, topic) {
+			if (err) return next(err);
+			if (!topic) return next(new Error('Failed to load Topic ' + id));
+			req.topic = topic;
+			next();
+		});
 };
 
 /**
  * Topic authorization middleware
  */
 exports.hasAuthorization = function (req, res, next) {
-	if (req.topic.creator.id !== req.user.id) {
+	if (!_.contains(req.user.roles, 'admin') || req.topic.creator.id !== req.user.id) {
 		return res.send(403, 'User is not authorized');
 	}
+	next();
+};
+
+/**
+ * Topic permission middleware
+ */
+exports.hasPermission = function (req, res, next) {
+	if (_.contains(req.user.roles, 'admin') || _.contains(req.user.roles, 'author')) {
+		next();
+	} else {
+		return res.send(401, 'User has no permission');
+	}
+};
+
+/**
+ * Topic validation middleware
+ */
+exports.validate = function (req, res, next) {
 	next();
 };

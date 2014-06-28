@@ -19,15 +19,6 @@ var PoemSchema = new Schema({
 		required: 'Please fill Poem Content'
 	},
 	/**
-	 * Topic of Poem
-	 * @type {Object}
-	 */
-	topic: {
-		type: Schema.ObjectId,
-		ref: 'Topic',
-		required: 'Please fill Poem Topic'
-	},
-	/**
 	 * Like Count of Poem
 	 * @type {Number}
 	 */

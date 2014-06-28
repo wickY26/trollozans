@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function(app) {
+module.exports = function (app) {
 	var users = require('../../app/controllers/users');
 	var poems = require('../../app/controllers/poems');
 

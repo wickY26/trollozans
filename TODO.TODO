@@ -1,20 +1,20 @@
 trollozans API (version 0.0.1):
   topic API (version 0.0.1):
     topic API is responsible for 'topic' operations...
-   createTopic:
-    □ validate Topic
-      for now this can be an empty function...
+   endpoints:
     □ create Topic
-   updateTopic:
-    □ validate Topic
-      for now this can be an empty function...
+      create new Topic
     □ update Topic
-   deleteTopic:
+      update topic with given _id...
     □ delete Topic
       delete topic with given _id...
-   findTopics:
     □ find Topics
-      can take a query parameter for filter out the result...
+      find topics... can take a query parameter for filter out the result...
+   middlewares:
+    □ validate
+      for now this can be an empty function...
+    □ hasAuthorization
+    □ hasPermission
   poem API (version 0.0.1):
     poem API is responsible for 'poem' operations...
    createPoem:

@@ -7,16 +7,12 @@ module.exports = function (app) {
 	// Topics Routes
 	app.route('/topics')
 		.get(topics.list)
-		.post(users.requiresLogin, topics.create);
+		.post(users.requiresLogin, topics.hasPermission, topics.validate, topics.create);
 
 	app.route('/topics/:topicId')
 		.get(topics.read)
-		.put(users.requiresLogin, topics.hasAuthorization, topics.update)
-		.delete(users.requiresLogin, topics.hasAuthorization, topics.delete);
-
-	app.route('/topics/poems/:topicId')
-		.get(topics.getPoems)
-		.post(topics.createPoem);
+		.put(users.requiresLogin, topics.hasPermission, topics.hasAuthorization, topics.validate, topics.update)
+		.delete(users.requiresLogin, topics.hasPermission, topics.hasAuthorization, topics.delete);
 
 	// Finish by binding the Topic middleware
 	app.param('topicId', topics.topicByID);

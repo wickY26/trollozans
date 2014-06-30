@@ -34,11 +34,9 @@ var getErrorMessage = function (err) {
 
 /**
  * Save topic to db
- * @param  {[type]} topic [description]
- * @return {[type]}       [description]
  */
 var save = function (topic, res) {
-	topic.save(function (err) {
+	topic.save(function (err, topic) {
 		if (err) {
 			return res.send(400, {
 				message: getErrorMessage(err)
@@ -54,7 +52,7 @@ var save = function (topic, res) {
 exports.create = function (req, res) {
 	var topic = new Topic(req.body);
 	topic.creator = req.user;
-
+	// save topic
 	save(topic, res);
 };
 
@@ -62,7 +60,25 @@ exports.create = function (req, res) {
  * Show the current Topic
  */
 exports.read = function (req, res) {
-	res.jsonp(req.topic);
+	Topic.findById(req.topic._id)
+		.populate('creator', 'displayName')
+		.populate({
+			path: 'poems',
+			match: {
+				isApproved: true
+			},
+			sort: '-created'
+		})
+		.lean(true)
+		.exec(function (err, topic) {
+			if (err) {
+				return res.send(400, {
+					message: getErrorMessage(err)
+				});
+			} else {
+				res.jsonp(topic);
+			}
+		});
 };
 
 /**
@@ -70,9 +86,8 @@ exports.read = function (req, res) {
  */
 exports.update = function (req, res) {
 	var topic = req.topic;
-
 	topic = _.extend(topic, req.body);
-
+	// save topic
 	save(topic, res);
 };
 
@@ -82,10 +97,9 @@ exports.update = function (req, res) {
 exports.pushPoem = function (req, res) {
 	var topic = req.topic;
 	var poem = req.poem;
-
 	topic.poems.push(poem);
+	// save topic
 	save(topic, res);
-
 };
 
 /**
@@ -109,25 +123,37 @@ exports.delete = function (req, res) {
  * List of Topics
  */
 exports.list = function (req, res) {
+	var topicList = [];
 	Topic.find().sort('-created')
 		.populate('creator', 'displayName')
-		.populate({
-			path: 'poems',
-			match: {
-				isApproved: true
-			},
-			sort: '-created',
-			options: {
-				limit: 3
-			}
-		}).exec(function (err, topics) {
-			if (err) {
-				return res.send(400, {
-					message: getErrorMessage(err)
-				});
-			} else {
-				res.jsonp(topics);
-			}
+		.lean(true)
+		.exec(function (err, topics) {
+			async.each(topics, function (topic, callback) {
+				Topic.findById(topic._id)
+					.populate({
+						path: 'poems',
+						match: {
+							isApproved: true
+						},
+						sort: '-created',
+						options: {
+							limit: 3
+						}
+					})
+					.lean(true)
+					.exec(function (err, topic) {
+						topicList.push(topic);
+						callback(err);
+					});
+			}, function (err) {
+				if (err) {
+					return res.send(400, {
+						message: getErrorMessage(err)
+					});
+				} else {
+					res.jsonp(topicList);
+				}
+			});
 		});
 };
 
@@ -137,13 +163,6 @@ exports.list = function (req, res) {
 exports.topicByID = function (req, res, next, id) {
 	Topic.findById(id)
 		.populate('creator', 'displayName')
-		.populate({
-			path: 'poems',
-			match: {
-				isApproved: true
-			},
-			sort: '-created'
-		})
 		.exec(function (err, topic) {
 			if (err) return next(err);
 			if (!topic) return next(new Error('Failed to load Topic ' + id));

@@ -36,6 +36,16 @@ var TopicSchema = new Schema({
 		type: Number,
 		default: 0
 	},
+
+	/**
+	 * users who liked this poem
+	 * @type {Array}
+	 */
+	usersLiked: [{
+		type: Schema.ObjectId,
+		ref: 'User'
+	}],
+
 	/**
 	 * Content of Topic
 	 * @type {Object}

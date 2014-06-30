@@ -117,7 +117,7 @@ exports.poemByID = function (req, res, next, id) {
 	});
 };
 
-/**
+/**u
  * Poem authorization middleware
  */
 exports.hasAuthorization = function (req, res, next) {
@@ -142,5 +142,33 @@ exports.hasPermission = function (req, res, next) {
  * Poem validation middleware
  */
 exports.validate = function (req, res, next) {
+	next();
+};
+
+/**
+ * Poem canlike middleware if can like change the req poem
+ */
+exports.canLike = function (req, res, next) {
+
+	var poem = req.poem;
+	if (poem.usersLiked.indexOf(req.user._id) > -1) {
+		return res.send(401, 'User has not permisson. Liked already');
+	} else {
+		poem.usersLiked.push(req.user._id);
+	}
+	next();
+};
+
+/**
+ * Poem canlike middleware if can like change the req poem
+ */
+exports.canUnlike = function (req, res, next) {
+
+	var poem = req.poem;
+	if (poem.usersLiked.indexOf(req.user._id) > -1) {
+		poem.usersLiked.pop(req.user._id);
+	} else {
+		return res.send(401, 'User has not permisson. UnLiked already');
+	}
 	next();
 };

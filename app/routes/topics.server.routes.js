@@ -23,6 +23,12 @@ module.exports = function (app) {
 		.put(users.requiresLogin, poems.hasPermission, poems.hasAuthorization, poems.update)
 		.delete(users.requiresLogin, poems.hasPermission, poems.hasAuthorization, poems.delete);
 
+	app.route('/topics/like/:topicId')
+		.put(users.requiresLogin, topics.canLike, topics.update);
+
+	app.route('/topics/unlike/:topicId')
+		.put(users.requiresLogin, topics.canUnlike, topics.update);
+
 	// Finish by binding the Topic middleware
 	app.param('topicId', topics.topicByID);
 };

@@ -198,3 +198,31 @@ exports.hasPermission = function (req, res, next) {
 exports.validate = function (req, res, next) {
 	next();
 };
+
+/**
+ * Topic canlike middleware if can like change the req poem
+ */
+exports.canLike = function (req, res, next) {
+
+	var topic = req.topic;
+	if (topic.usersLiked.indexOf(req.user._id) > -1) {
+		return res.send(401, 'User has not permisson. Liked already');
+	} else {
+		topic.usersLiked.push(req.user._id);
+	}
+	next();
+};
+
+/**
+ * Topic canlike middleware if can like change the req poem
+ */
+exports.canUnlike = function (req, res, next) {
+
+	var topic = req.topic;
+	if (topic.usersLiked.indexOf(req.user._id) > -1) {
+		topic.usersLiked.pop(req.user._id);
+	} else {
+		return res.send(401, 'User has not permisson. UnLiked already');
+	}
+	next();
+};

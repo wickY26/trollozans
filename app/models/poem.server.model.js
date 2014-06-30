@@ -18,14 +18,15 @@ var PoemSchema = new Schema({
 		type: String,
 		required: 'Please fill Poem Content'
 	},
+
 	/**
-	 * Like Count of Poem
-	 * @type {Number}
+	 * users who liked this poem
+	 * @type {Array}
 	 */
-	likeCount: {
-		type: Number,
-		default: 0
-	},
+	usersLiked: [{
+		type: Schema.ObjectId,
+		ref: 'User'
+	}],
 	/**
 	 * Approve flag of Poem
 	 * @type {Boolean}

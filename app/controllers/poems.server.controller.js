@@ -151,7 +151,7 @@ exports.validate = function (req, res, next) {
 exports.canLike = function (req, res, next) {
 
 	var poem = req.poem;
-	if (poem.usersLiked.indexOf(req.user._id) > -1) {
+	if (_.contains(poem.usersLiked, req.user._id)) {
 		return res.send(401, 'User has not permisson. Liked already');
 	} else {
 		poem.usersLiked.push(req.user._id);
@@ -165,7 +165,7 @@ exports.canLike = function (req, res, next) {
 exports.canUnlike = function (req, res, next) {
 
 	var poem = req.poem;
-	if (poem.usersLiked.indexOf(req.user._id) > -1) {
+	if (_.contains(poem.usersLiked, req.user._id)) {
 		poem.usersLiked.pop(req.user._id);
 	} else {
 		return res.send(401, 'User has not permisson. UnLiked already');

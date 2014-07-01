@@ -172,3 +172,18 @@ exports.canUnlike = function (req, res, next) {
 	}
 	next();
 };
+
+/**
+ * Poem approve middleware change the req poem
+ */
+exports.approve = function (req, res, next) {
+
+	var poem = req.poem;
+	if (poem.isApproved) {
+		return res.send(200, 'Already Approved No Need to approve Again');
+	}
+
+	poem.isApproved = true;
+
+	next();
+};

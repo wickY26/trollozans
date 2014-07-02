@@ -106,6 +106,22 @@ exports.list = function (req, res) {
 };
 
 /**
+ * List of Poems waiting For Approval
+ */
+exports.getPoemsWaitingforApproval = function (req, res) {
+	Poem.find({
+		'isApproved': false
+	}).sort('-created').populate('author', 'displayName').exec(function (err, poems) {
+		if (err) {
+			return res.send(400, {
+				message: getErrorMessage(err)
+			});
+		} else {
+			res.jsonp(poems);
+		}
+	});
+};
+/**
  * Poem middleware
  */
 exports.poemByID = function (req, res, next, id) {

@@ -1,41 +1,95 @@
-<section data-ng-controller="MainTopicsController" data-ng-init="findTopics()">
-    <div class="row">
-        <div class="col-md-9">
-            <div class="panel" data-ng-repeat="topic in topics">
-                <h2 data-ng-bind="topic.title"></h2>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div data-content-wrapper data-type="topic.content.type" data-reference="topic.content.reference"></div>
+<div class="row" data-ng-controller="MainTopicsController" data-ng-init="findTopics()">
+    <!-- Content Column Start -->
+    <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12 equalcol conentsection" data-ng-controller="MainTopicsController" data-ng-init="findTopics()">
+        <!-- Contents Section Started -->
+        <div class="sections" data-ng-repeat="topic in topics">
+            <div class="row">
+                <!-- Topic Header Started -->
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <h3><a href="/#!/topics/{{topic._id}}" data-ng-bind="topic.title"></a></h3>
+                </div>
+                <!-- Topic Header End -->
+                <!-- Topic Content Started -->
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div data-content-wrapper2 data-topic="topic" data-like="likeTopic(topic)" data-unlike="unlikeTopic(topic)" data-user="authentication.user"></div>
+                </div>
+                <!-- Topic Content End -->
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" data-ng-if="topic.poems.length">
+                    <div id="comments">
+                        <div class="media" data-ng-repeat="poem in topic.poems">
+                            <a class="pull-left" href="#">
+                                <img class="media-object img-circle" src="http://dummyimage.com/64x64/4d494d/686a82.gif&text=placeholder+image" alt="placeholder+image">
+                            </a>
+                            <div class="media-body">
+                                <p data-ng-bind="poem.content"></p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-sm-6" data-ng-if="topic.poems.length">
-                        <ul class="media-list">
-                            <li class="media" data-ng-repeat="poem in topic.poems">
-                                <a class="pull-left" href="#">
-                                    <img class="media-object img-circle" src="http://dummyimage.com/64x64/4d494d/686a82.gif&text=placeholder+image" alt="placeholder+image">
-                                </a>
-                                <div class="media-body">
-                                    <small data-ng-bind="poem.content"></small>
-                                </div>
-                            </li>
-                        </ul>
-                        <a data-ng-href="#!/topics/{{topic._id}}" class="btn btn-block btn-warning">Read More...</a>
-                    </div>
-                    <div class="col-sm-6" data-ng-if="!topic.poems.length">
-                        <a data-ng-href="#!/topics/{{topic._id}}" class="btn btn-block btn-danger">
-                            No Poems yet, why don't you write one...
-                        </a>
-                    </div>
+                    <div class="clearfix"></div>
+                    <a data-ng-href="#!/topics/{{topic._id}}" class="btn btn-block btn-primary backcolor">
+                        Read More...
+                    </a>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" data-ng-if="!topic.poems.length">
+                    <a data-ng-href="#!/topics/{{topic._id}}" class="btn btn-block btn-primary backcolor">
+                        No Poems yet, why don't you write one...
+                    </a>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <br><br>
-            <div class="imgWrapper">
-                <img src="http://dummyimage.com/800x600/4d494d/686a82.gif&text=placeholder+image" alt="placeholder+image">
-            </div>
-            <div class="imgWrapper">
-                <img src="http://dummyimage.com/800x600/4d494d/686a82.gif&text=placeholder+image" alt="placeholder+image">
+        <!-- Contents Section End -->
+    </div>
+    <!-- Content Column End -->
+    <!-- Gray Sidebar Start -->
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 equalcol graysidebar">
+        <!-- Small Video Posts Widget start -->
+        <div class="widget">
+            <h2 class="heading">Random Topics</h2>
+            <div class="videolistsmall">
+                <ul class="bloglist">
+                    <li>
+                        <div class="media">
+                            <a href="video-detail-double-sidebar.html" class="pull-left">
+                                <img class="media-object img-responsive hovereffect" src="/lib/theme/images/img16.jpg" alt="">
+                            </a>
+                            <div class="media-body">
+                                <h5><a href="video-detail-double-sidebar.html">Dann Petty on Curabitur</a></h5>
+                                <ul>
+                                    <li><i class="fa fa-clock-o"></i>10:56</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="media">
+                            <a href="video-detail-double-sidebar.html" class="pull-left">
+                                <img class="media-object img-responsive hovereffect" src="/lib/theme/images/img17.jpg" alt="">
+                            </a>
+                            <div class="media-body">
+                                <h5><a href="video-detail-double-sidebar.html">Falling Down Focus</a></h5>
+                                <ul>
+                                    <li><i class="fa fa-clock-o"></i>10:56</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="media">
+                            <a href="video-detail-double-sidebar.html" class="pull-left">
+                                <img class="media-object img-responsive hovereffect" src="/lib/theme/images/img18.jpg" alt="">
+                            </a>
+                            <div class="media-body">
+                                <h5><a href="video-detail-double-sidebar.html">Waters Fourth Winged</a></h5>
+                                <ul>
+                                    <li><i class="fa fa-clock-o"></i>10:56</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
+        <!-- Small Video Posts Widget End -->
     </div>
-</section>
+     <!-- Gray Sidebar End -->
+</div>

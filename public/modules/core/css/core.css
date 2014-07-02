@@ -7,3 +7,7 @@
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
 	display: none !important;
 }
+/* logo postion at top navbar */ 
+.navbar-collapse .logo {
+	padding-top: 7px;
+}

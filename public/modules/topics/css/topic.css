@@ -18,4 +18,13 @@
     width: auto\9; /* ie8 */
     height: auto;
     margin-bottom: 10px;
+    border: #191b1f solid 10px;
+}
+
+.poem {
+	white-space: pre;
+}
+
+.playershadow {
+	padding-bottom: 35px!important; 
 }

@@ -6,7 +6,20 @@ angular.module('topics').controller('DetailTopicController', ['$scope', '$stateP
 
 		// Find existing Topic
 		$scope.findTopic = function () {
-			$scope.topic = Topics.one($stateParams.topicId).get().$object;
+			Topics.one($stateParams.topicId).get().then(function (topic) {
+				$scope.topic = topic;
+			});
+		};
+
+		// Like Topic
+		$scope.likeTopic = function (topic) {
+			Topics.one('like').one(topic._id).put();
+			topic.usersLiked.push($scope.authentication.user._id);
+		};
+		// Unlike Topic
+		$scope.unlikeTopic = function (topic) {
+			Topics.one('unlike').one(topic._id).put();
+			topic.usersLiked = _.remove(topic.usersLiked, $scope.authentication.user._id);
 		};
 
 		// Find a list of Poems of Topic

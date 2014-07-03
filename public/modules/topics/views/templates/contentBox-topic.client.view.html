@@ -1,0 +1,22 @@
+<div class="videobox2">
+	<figure>
+		<!-- Content Thumbnail Start -->
+		<a href="/#!/topics/{{topic._id}}">
+			<img data-ng-src="{{thumbnailSrc}}" class="img-responsive hovereffect" alt="">
+		</a>
+		<!-- Content Thumbnail End -->
+		<!-- Content Info Start -->
+		<div class="vidopts">
+			<ul>
+				<li><i class="fa fa-heart"></i>{{topic.usersLiked.length}}</li>
+				<li data-ng-if="!_canLike()"><a class="btn btn-primary btn-xs backcolor" data-ng-click="like()"><i class="fa fa-thumbs-up"></i>Like</a></li>
+				<li data-ng-if="_canLike()"><a class="btn btn-primary btn-xs backcolor" data-ng-click="unlike()"><i class="fa fa-thumbs-down"></i>Unlike</a></li>
+			</ul>
+			<div class="clearfix"></div>
+		</div>
+		<!-- Content Info End -->
+	</figure>
+	<!-- Content Title Start -->
+	<h4><a href="/#!/topics/{{topic._id}}">{{topic.title}}</a></h4>
+	<!-- Content Title End -->
+</div>

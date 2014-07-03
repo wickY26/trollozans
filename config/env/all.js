@@ -13,7 +13,7 @@ module.exports = {
 	assets: {
 		lib: {
 			css: [
-				'public/lib/bootstrap/dist/css/bootstrap.css',
+				'public/lib/theme/css/bootstrap.css',
 				'public/lib/select2/select2.css',
 				'public/lib/select2-bootstrap-css/select2-bootstrap.css',
 				'public/lib/theme/css/font-awesome.min.css',

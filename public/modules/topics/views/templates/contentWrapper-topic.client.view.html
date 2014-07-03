@@ -1,0 +1,57 @@
+<div class="row"> 
+    <!-- Video Player Start -->
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 playershadow">
+        <div class="playeriframe" data-ng-if="topic.content.type != 'image'">
+            <iframe data-ng-src="{{iframeSrc}}" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>
+        </div>
+        <div class="imgWrapper" data-ng-if="topic.content.type == 'image'">
+        	<img ng-src="{{topic.content.reference}}"/>
+        </div>
+    </div>
+    <!-- Video Player End --> 
+    <!-- Video Stats and Sharing Start -->
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 videoinfo">
+        <div class="row"> 
+            <!-- Video Stats Start -->
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 stats">
+                <hr class="visible-xs">
+                <ul>
+                    <li class="likes">
+                        <h5>Likes</h5>
+                        <h2>{{topic.usersLiked.length}}</h2>
+                    </li>
+                    <li class="likes" data-ng-if="!_canLike()">
+                        <a class="btn btn-primary btn backcolor" data-ng-click="like()"><i class="fa fa-thumbs-up"></i> Like</a>
+                    </li>
+                    <li class="likes" data-ng-if="_canLike()">
+                        <a class="btn btn-primary btn backcolor" data-ng-click="unlike()"><i class="fa fa-thumbs-down"></i> Unlike</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- Video Stats End --> 
+            <!-- Video Share Start -->
+            <div class="col-lg-8 col-md-8 col-sm-6 col-xs-12 videoshare">
+                <ul>
+                    <li class="facebook">
+                        <i class="fa fa-facebook"></i>
+                        <div class="shaingstats">
+                            <h5>36K</h5>
+                            <p>Shares</p>
+                        </div>
+                        <a href="http://www.facebook.com/" class="link" target="_blank"></a>
+                    </li>
+                    <li class="twitter">
+                        <i class="fa fa-twitter"></i>
+                        <div class="shaingstats">
+                            <h5>15K</h5>
+                            <p>Tweets</p>
+                        </div>
+                        <a href="http://www.twitter.com/" class="link" target="_blank"></a>
+                    </li>
+                </ul>
+            </div>
+            <!-- Video Share End --> 
+        </div>
+    </div>
+    <!-- Video Stats and Sharing End --> 
+</div>

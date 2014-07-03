@@ -14,8 +14,9 @@ angular.module('topics').controller('MainTopicsController', ['$scope', '$statePa
 			topic.usersLiked.push($scope.authentication.user._id);
 		};
 		// Unlike Topic
-		$scope.unlikeTopic = function (topicId) {
-			alert('unlike ' + topicId);
+		$scope.unlikeTopic = function (topic) {
+			Topics.one('unlike').one(topic._id).put();
+			topic.usersLiked = _.remove(topic.usersLiked, $scope.authentication.user._id);
 		};
 	}
 ]);

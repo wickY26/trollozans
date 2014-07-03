@@ -8,9 +8,7 @@ angular.module('core').service('Constants', [
 		this.contentTypes = {
 			'image': 'Image',
 			'youtube': 'Youtube',
-			'dailymotion': 'Daily Motion',
-			'vimeo': 'Vimeo',
-			'izlesene': 'Izlesene',
+			'dailymotion': 'Daily Motion'
 		};
 
 		// create select2 data array from given object reference 

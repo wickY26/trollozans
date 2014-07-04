@@ -4,7 +4,7 @@
 var ApplicationConfiguration = (function () {
 	// Init module configuration options
 	var applicationModuleName = 'trollozans';
-	var applicationModuleVendorDependencies = ['ngResource', 'ngCookies', 'ngAnimate', 'ngTouch', 'ngSanitize', 'ui.router', 'ui.bootstrap', 'ui.utils', 'ui.select2', 'restangular'];
+	var applicationModuleVendorDependencies = ['ngResource', 'ngCookies', 'ngAnimate', 'ngTouch', 'ngSanitize', 'ui.router', 'ui.bootstrap', 'ui.utils', 'ui.select2', 'restangular', 'cgBusy'];
 
 	// Add a new vertical module
 	var registerModule = function (moduleName) {

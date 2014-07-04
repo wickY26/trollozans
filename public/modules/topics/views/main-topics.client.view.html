@@ -1,6 +1,6 @@
 <div class="row" data-ng-controller="MainTopicsController" data-ng-init="findTopics()">
     <!-- Content Column Start -->
-    <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 equalcol conentsection" data-ng-controller="MainTopicsController" data-ng-init="findTopics()">
+    <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 equalcol conentsection" data-ng-controller="MainTopicsController" data-ng-init="findTopics()" data-cg-busy="{promise:topicsPromise,backdrop:true,delay:0,minDuration:1000}">
         <!-- Contents Section Started -->
         <div class="sections" data-ng-repeat="topic in topics">
             <div class="row">

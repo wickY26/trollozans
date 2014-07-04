@@ -6,7 +6,11 @@ angular.module('topics').controller('MainTopicsController', ['$scope', '$statePa
 
 		// Find a list of Topics with top three Poems
 		$scope.findTopics = function () {
-			$scope.topics = Topics.getList().$object;
+			// topics promise object for loading indicator
+			$scope.topicsPromise = Topics.getList();
+			$scope.topicsPromise.then(function (topics) {
+				$scope.topics = topics;
+			});
 		};
 		// Like Topic
 		$scope.likeTopic = function (topic) {

@@ -6,7 +6,9 @@ angular.module('topics').controller('DetailTopicController', ['$scope', '$stateP
 
 		// Find existing Topic
 		$scope.findTopic = function () {
-			Topics.one($stateParams.topicId).get().then(function (topic) {
+			// topic promise object for loading indicator
+			$scope.topicPromise = Topics.one($stateParams.topicId).get();
+			$scope.topicPromise.then(function (topic) {
 				$scope.topic = topic;
 			});
 		};

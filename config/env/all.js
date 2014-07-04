@@ -17,7 +17,8 @@ module.exports = {
 				'public/lib/select2/select2.css',
 				'public/lib/select2-bootstrap-css/select2-bootstrap.css',
 				'public/lib/theme/css/font-awesome.min.css',
-				'public/lib/theme/css/style.css'
+				'public/lib/theme/css/style.css',
+				'public/lib/angular-busy/dist/angular-busy.css'
 			],
 			js: [
 				'public/lib/jquery/dist/jquery.js',
@@ -34,7 +35,8 @@ module.exports = {
 				'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
 				'public/lib/angular-ui-select2/src/select2.js',
 				'public/lib/restangular/dist/restangular.js',
-				'public/lib/lodash/dist/lodash.js'
+				'public/lib/lodash/dist/lodash.js',
+				'public/lib/angular-busy/dist/angular-busy.js'
 			]
 		},
 		css: [

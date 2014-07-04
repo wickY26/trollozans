@@ -1,9 +1,9 @@
 <section data-ng-controller="DetailTopicController" data-ng-init="findTopic()">
     <!-- Contents Section Started -->
-    <div class="sections">
+    <div class="sections" data-cg-busy="{promise:topicPromise,backdrop:true,delay:0,minDuration:1000}">
         <div class="row">
             <!-- Topic Content Started -->
-            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" data-ng-if="topic">
                 <div data-content-wrapper data-topic="topic" data-like="likeTopic(topic)" data-unlike="unlikeTopic(topic)" data-user="authentication.user"></div>
                 <form data-ng-submit="createPoem(poem)" data-ng-show="authentication.user" novalidate>
                     <fieldset>

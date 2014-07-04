@@ -31,24 +31,13 @@
             <!-- Video Stats End --> 
             <!-- Video Share Start -->
             <div class="col-lg-8 col-md-8 col-sm-6 col-xs-12 videoshare">
-                <ul>
-                    <li class="facebook">
-                        <i class="fa fa-facebook"></i>
-                        <div class="shaingstats">
-                            <h5>36K</h5>
-                            <p>Shares</p>
-                        </div>
-                        <a href="http://www.facebook.com/" class="link" target="_blank"></a>
-                    </li>
-                    <li class="twitter">
-                        <i class="fa fa-twitter"></i>
-                        <div class="shaingstats">
-                            <h5>15K</h5>
-                            <p>Tweets</p>
-                        </div>
-                        <a href="https://twitter.com/share" class="link" target="_blank" data-track="social,t.s,,,d,a6wPZ49,l" data-evt="Twitter-Share,ListClicked,http://9gag.com/gag/a6wPZ49" data-title="Worst%20coloring%20book%20ever" data-share="http://9gag.com/gag/a6wPZ49?ref=t"></a>
-                        <!-- <a href="http://www.twitter.com/" class="link" target="_blank"></a> -->
-                    </li>
+                <ul data-ng-social-buttons
+                    data-url="'http://www.trollozans.com'"
+                    data-title="topic.title"
+                    data-description="topic.description"
+                    data-image="imgUrl">
+                    <li class="ng-social-facebook">Facebook</li>
+                    <li class="ng-social-twitter">Twitter</li>
                 </ul>
             </div>
             <!-- Video Share End --> 

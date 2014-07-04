@@ -1,48 +1,42 @@
-<section data-ng-controller="DetailTopicController" data-ng-init="findTopic()">
-    <!-- Contents Section Started -->
-    <div class="sections" data-cg-busy="{promise:topicPromise,backdrop:true,delay:0,minDuration:1000}">
-        <div class="row">
-            <!-- Topic Content Started -->
-            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" data-ng-if="topic">
-                <div data-content-wrapper data-topic="topic" data-like="likeTopic(topic)" data-unlike="unlikeTopic(topic)" data-user="authentication.user"></div>
-                <form data-ng-submit="createPoem(poem)" data-ng-show="authentication.user" novalidate>
-                    <fieldset>
-                        <div class="form-group">
-                            <label class="control-label" for="poem">Your Poem</label>
-                            <div>
-                                <textarea data-ng-model="poem.content" id="poem" class="form-control" rows="4" maxlength="250" placeholder="Your Poem"></textarea>
-                                <span>{{250 - poem.content.length}} left</span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div>
-                                <button type="submit" class="btn btn-primary backcolor">Submit</button>
-                            </div>
-                        </div>
-                        <div data-ng-show="error" class="text-danger">
-                            <strong data-ng-bind="error"></strong>
-                        </div>
-                    </fieldset>
-                </form>
-            </div>
-            <!-- Topic Content End -->
-            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" data-ng-if="topic.poems.length">
-                <div id="comments">
-                    <div class="media" data-ng-repeat="poem in topic.poems">
-                        <a class="pull-left" href="#">
-                            <img class="media-object img-circle" src="http://dummyimage.com/64x64/4d494d/686a82.gif&text=placeholder+image" alt="placeholder+image">
-                        </a>
-                        <div class="media-body">
-                            <p class="poem" data-ng-bind="poem.content"></p>
-                        </div>
+<div class="row" data-ng-controller="DetailTopicController" data-ng-init="findTopic()" data-cg-busy="{promise:topicPromise,backdrop:true,delay:0,minDuration:1000}">
+    <!-- Topic Content Started -->
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" data-ng-if="topic">
+        <div data-content-wrapper data-topic="topic" data-like="likeTopic(topic)" data-unlike="unlikeTopic(topic)" data-user="authentication.user"></div>
+        <form data-ng-submit="createPoem(poem)" data-ng-show="authentication.user" novalidate>
+            <fieldset>
+                <div class="form-group">
+                    <label class="control-label" for="poem">Your Poem</label>
+                    <div>
+                        <textarea data-ng-model="poem.content" id="poem" class="form-control" rows="4" maxlength="250" placeholder="Your Poem"></textarea>
+                        <span>{{250 - poem.content.length}} left</span>
                     </div>
                 </div>
-                <div class="clearfix"></div>
-                <a data-ng-href="#!/topics/{{topic._id}}" class="btn btn-block btn-primary backcolor">
-                    Read More...
+                <div class="form-group">
+                    <div>
+                        <button type="submit" class="btn btn-primary backcolor">Submit</button>
+                    </div>
+                </div>
+                <div data-ng-show="error" class="text-danger">
+                    <strong data-ng-bind="error"></strong>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <!-- Topic Content End -->
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" data-ng-if="topic.poems.length">
+        <div id="comments">
+            <div class="media" data-ng-repeat="poem in topic.poems">
+                <a class="pull-left" href="#">
+                    <img class="media-object img-circle" src="http://dummyimage.com/64x64/4d494d/686a82.gif&text=placeholder+image" alt="placeholder+image">
                 </a>
+                <div class="media-body">
+                    <p class="poem" data-ng-bind="poem.content"></p>
+                </div>
             </div>
         </div>
+        <div class="clearfix"></div>
+        <a data-ng-href="#!/topics/{{topic._id}}" class="btn btn-block btn-primary backcolor">
+            Read More...
+        </a>
     </div>
-    <!-- Contents Section End -->
-</section>
+</div>

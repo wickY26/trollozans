@@ -8,6 +8,6 @@
 	display: none !important;
 }
 /* logo postion at top navbar */ 
-.navbar-collapse .logo {
+.logo {
 	padding-top: 7px;
 }

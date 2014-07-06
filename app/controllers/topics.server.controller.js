@@ -177,8 +177,9 @@ exports.topicByID = function (req, res, next, id) {
 exports.hasAuthorization = function (req, res, next) {
 	if (!_.contains(req.user.roles, 'admin') || req.topic.creator.id !== req.user.id) {
 		return res.send(403, 'User is not authorized');
+	} else {
+		next();
 	}
-	next();
 };
 
 /**
@@ -209,8 +210,8 @@ exports.canLike = function (req, res, next) {
 		return res.send(401, 'User has not permisson. Liked already');
 	} else {
 		topic.usersLiked.push(req.user._id);
+		next();
 	}
-	next();
 };
 
 /**
@@ -221,8 +222,8 @@ exports.canUnlike = function (req, res, next) {
 	var topic = req.topic;
 	if (topic.usersLiked.indexOf(req.user._id) > -1) {
 		topic.usersLiked.pop(req.user._id);
+		next();
 	} else {
 		return res.send(401, 'User has not permisson. UnLiked already');
 	}
-	next();
 };

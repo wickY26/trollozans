@@ -139,8 +139,9 @@ exports.poemByID = function (req, res, next, id) {
 exports.hasAuthorization = function (req, res, next) {
 	if (!_.contains(req.user.roles, 'admin') || req.poem.author.id !== req.user.id) {
 		return res.send(403, 'User is not authorized');
+	} else {
+		next();
 	}
-	next();
 };
 
 /**
@@ -171,8 +172,8 @@ exports.canLike = function (req, res, next) {
 		return res.send(401, 'User has not permisson. Liked already');
 	} else {
 		poem.usersLiked.push(req.user._id);
+		next();
 	}
-	next();
 };
 
 /**
@@ -183,10 +184,10 @@ exports.canUnlike = function (req, res, next) {
 	var poem = req.poem;
 	if (_.contains(poem.usersLiked, req.user._id)) {
 		poem.usersLiked.pop(req.user._id);
+		next();
 	} else {
 		return res.send(401, 'User has not permisson. UnLiked already');
 	}
-	next();
 };
 
 /**
@@ -197,9 +198,8 @@ exports.approve = function (req, res, next) {
 	var poem = req.poem;
 	if (poem.isApproved) {
 		return res.send(200, 'Already Approved No Need to approve Again');
+	} else {
+		poem.isApproved = true;
+		next();
 	}
-
-	poem.isApproved = true;
-
-	next();
 };

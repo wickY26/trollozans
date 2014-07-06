@@ -8,30 +8,26 @@ module.exports = function (app) {
 	/**
 	 *	Like Poem according to poemId user need to be logged in
 	 */
-	app.route('/poems/like/:poemId')
-		.put(users.requiresLogin, poems.canLike, poems.update);
+	app.route('/poems/like/:poemId').put(users.requiresLogin, poems.canLike, poems.update);
 
 	/**
 	 * Unlike Poem according to poemId user need to be logged in
 	 */
-	app.route('/poems/unlike/:poemId')
-		.put(users.requiresLogin, poems.canUnlike, poems.update);
+	app.route('/poems/unlike/:poemId').put(users.requiresLogin, poems.canUnlike, poems.update);
 
 	/**
 	 * Approve poem according to PoemId. Only user with admin role can approve
 	 */
-	app.route('/poems/approve/:poemId')
-		.put(users.hasAuthorization(['admin']), poems.approve, poems.update);
+	app.route('/poems/approve/:poemId').put(users.hasAuthorization(['admin']), poems.approve, poems.update);
 
 	/**
 	 * gets the poems those not approved. Only user with admin role can gets the list
 	 */
-	app.route('/poems/waitingForApproval')
-		.get(users.hasAuthorization(['admin']), poems.getPoemsWaitingforApproval);
+	app.route('/poems/waitingForApproval').get(users.hasAuthorization(['admin']), poems.getPoemsWaitingforApproval);
 
 	/**
 	 * Gets the poems accordign to topicId . poems those belongs the specific topic
-	 * Create new Poem under the spesified topic
+	 * Create new Poem under the specified topic
 	 */
 	app.route('/poems/:topicId')
 		.get(poems.list)

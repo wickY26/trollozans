@@ -1,8 +1,8 @@
 'use strict';
 
 // Poems controller
-angular.module('poems').controller('PoemsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Poems', 'Topics', 'Tags',
-	function ($scope, $stateParams, $location, Authentication, Poems, Topics, Tags) {
+angular.module('poems').controller('PoemsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Poems',
+	function ($scope, $stateParams, $location, Authentication, Poems) {
 		$scope.authentication = Authentication;
 
 		// Create new Poem
@@ -54,22 +54,21 @@ angular.module('poems').controller('PoemsController', ['$scope', '$stateParams',
 
 		// Find existing Poem
 		$scope.findOne = function () {
-			$scope.poem = Poems.get({
-				poemId: $stateParams.poemId
+			$scope.poem = Poems.one($stateParams.poemId).get().$object;
+		};
+
+		// find poems those wating for an approval
+		$scope.findUnapprovedPoems = function () {
+			$scope.poemPromise = Poems.one('waitingForApproval').getList();
+			$scope.poemPromise.then(function (poems) {
+				$scope.poems = poems;
 			});
 		};
 
-		// Find a list of Topics
-		$scope.findTopics = function () {
-			Topics.query(function (response) {
-				$scope.topics = response;
-			});
-		};
-
-		// Find a list of Tags
-		$scope.findTags = function () {
-			Tags.query(function (response) {
-				$scope.tags = response;
+		$scope.approvePoem = function (poem, index) {
+			$scope.poemPromise = Poems.one('approve').one(poem._id).put();
+			$scope.poemPromise.then(function (response) {
+				$scope.poems.splice(index, 1);
 			});
 		};
 	}

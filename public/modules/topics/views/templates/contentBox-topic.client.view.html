@@ -9,14 +9,13 @@
 		<div class="vidopts">
 			<ul>
 				<li><i class="fa fa-heart"></i>{{topic.usersLiked.length}}</li>
-				<li data-ng-if="!_canLike()"><a class="btn btn-primary btn-xs backcolor" data-ng-click="like()"><i class="fa fa-thumbs-up"></i>Like</a></li>
-				<li data-ng-if="_canLike()"><a class="btn btn-primary btn-xs backcolor" data-ng-click="unlike()"><i class="fa fa-thumbs-down"></i>Unlike</a></li>
+				<li><div data-like-button data-like-array="topic.usersLiked" data-like="like()" data-unlike="unlike()" data-user="user"></div>
 			</ul>
 			<div class="clearfix"></div>
 		</div>
 		<!-- Content Info End -->
 	</figure>
 	<!-- Content Title Start -->
-	<h4><a href="/#!/topics/{{topic._id}}">{{topic.title}}</a></h4>
+	<h2><a href="/#!/topics/{{topic._id}}">{{topic.title}}</a></h2>
 	<!-- Content Title End -->
 </div>

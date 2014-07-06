@@ -1,19 +1,18 @@
-<section data-ng-controller="PoemsController" data-ng-init="find()">
+<section data-ng-controller="PoemsController" data-ng-init="findUnapprovedPoems()">
     <div class="page-header">
         <h1>Poems</h1>
     </div>
-    <div class="list-group">
-        <a data-ng-repeat="poem in poems" data-ng-href="#!/poems/{{poem._id}}" class="list-group-item">
-			<small class="list-group-item-text">
-				Posted on
-				<span data-ng-bind="poem.created | date:'medium'"></span>
-				by
-				<span data-ng-bind="poem.author.displayName"></span>
-			</small>
-			<h4 class="list-group-item-heading" data-ng-bind="poem.title"></h4>
-        </a>
+    <div class="list-group" data-cg-busy="{promise:poemPromise,backdrop:true,delay:0,minDuration:1000}">
+        <div class="media" data-ng-repeat="poem in poems">
+            <a class="pull-left" href="javascript:;" data-ng-click="approvePoem(poem, $index)">
+                <i class="fa fa-check-circle-o fa-5x"></i>
+            </a>
+            <div class="media-body">
+                <p class="poem" data-ng-bind="poem.content"></p>
+            </div>
+        </div>
     </div>
-    <div class="alert alert-warning text-center" data-ng-hide="!poems.$resolved || poems.length">
-    	No Poems yet, why don't you <a href="/#!/poems/create">create one</a>?
+    <div class="alert alert-success text-center" data-ng-hide="poems.length">
+        <b>All poems are approved...</b>
     </div>
 </section>

@@ -1,0 +1,25 @@
+<div class="custom-container" data-ng-controller="FooterController">
+    <!-- Footer Topics Start -->
+    <div class="row" data-ng-init="findTopics()">
+        <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6" data-ng-repeat="topic in topics"> 
+            <div data-content-menu-box data-topic="topic"></div> 
+        </div>
+    </div>
+    <!-- Footer Topics End -->
+    <hr />
+    <div class="row">
+        <div class="col-lg-10 col-md-10 col-sm-9 .col-xs-9">
+            <p class="copyrights">© 2014. All rights reserved.</p>
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-3 .col-xs-3">
+            <div class="socialnetworks">
+                <ul class="pull-right">
+                    <li><a href="#" data-toggle="tooltip" title="Facebook" class="facebook"><i class="fa fa-facebook"></i></a></li>
+                    <li><a href="#" data-toggle="tooltip" title="Youtube" class="youtube"><i class="fa fa-youtube"></i></a></li>
+                    <li><a href="#" data-toggle="tooltip" title="Twitter" class="twitter"><i class="fa fa-twitter"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>

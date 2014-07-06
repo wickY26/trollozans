@@ -13,11 +13,8 @@ module.exports = {
 	assets: {
 		lib: {
 			css: [
-				'public/lib/theme/css/bootstrap.css',
 				'public/lib/select2/select2.css',
 				'public/lib/select2-bootstrap-css/select2-bootstrap.css',
-				'public/lib/theme/css/font-awesome.min.css',
-				'public/lib/theme/css/style.css',
 				'public/lib/angular-busy/dist/angular-busy.css'
 			],
 			js: [
@@ -40,13 +37,15 @@ module.exports = {
 			]
 		},
 		css: [
-			'public/modules/**/css/*.css'
+			'public/modules/**/css/*.css',
+			'public/assets/css/*.css'
 		],
 		js: [
 			'public/config.js',
 			'public/application.js',
 			'public/modules/*/*.js',
-			'public/modules/*/*[!tests]*/*.js'
+			'public/modules/*/*[!tests]*/*.js',
+			'public/assets/js/*.js'
 		],
 		tests: [
 			'public/lib/angular-mocks/angular-mocks.js',

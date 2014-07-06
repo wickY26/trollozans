@@ -112,7 +112,7 @@ angular.module('core').directive('ngSocialFacebook', function () {
 			}
 		},
 		popup: {
-			url: 'http://www.facebook.com/sharer/sharer.php?u={url}',
+			url: 'https://www.facebook.com/dialog/feed?app_id=145634995501895&display=popup&caption=An%20example%20caption&link=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fdialogs%2F&redirect_uri=https://developers.facebook.com/tools/explorer',
 			width: 600,
 			height: 500
 		}

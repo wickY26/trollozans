@@ -1,14 +1,16 @@
 'use strict';
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 	// Unified Watch Object
 	var watchFiles = {
-		serverViews: ['app/views/**/*.*'], 
+		serverViews: ['app/views/**/*.*'],
 		serverJS: ['gruntfile.js', 'server.js', 'config/**/*.js', 'app/**/*.js'],
 		clientViews: ['public/modules/**/views/*.html'],
 		clientJS: ['public/js/*.js', 'public/modules/**/*.js'],
 		clientCSS: ['public/modules/**/*.css'],
-		mochaTests: ['app/tests/**/*.js']
+		mochaTests: ['app/tests/**/*.js'],
+		themeJS: ['public/assets/js/*.js'],
+		themeCSS: ['public/assets/css/*.css']
 	};
 
 	// Project Configuration
@@ -44,6 +46,20 @@ module.exports = function(grunt) {
 			clientCSS: {
 				files: watchFiles.clientCSS,
 				tasks: ['csslint'],
+				options: {
+					livereload: true
+				}
+			},
+			themeJS: {
+				files: watchFiles.themeJS,
+				task: ['jshint'],
+				options: {
+					livereload: true
+				}
+			},
+			themeCSS: {
+				files: watchFiles.themeCSS,
+				task: ['csslint'],
 				options: {
 					livereload: true
 				}
@@ -105,13 +121,13 @@ module.exports = function(grunt) {
 				}
 			}
 		},
-        ngmin: {
-            production: {
-                files: {
-                    'public/dist/application.js': '<%= applicationJavaScriptFiles %>'
-                }
-            }
-        },
+		ngmin: {
+			production: {
+				files: {
+					'public/dist/application.js': '<%= applicationJavaScriptFiles %>'
+				}
+			}
+		},
 		concurrent: {
 			default: ['nodemon', 'watch'],
 			debug: ['nodemon', 'watch', 'node-inspector'],
@@ -146,8 +162,8 @@ module.exports = function(grunt) {
 	process.env.NODE_ENV = grunt.option('env');
 
 	// A Task for loading the configuration object
-	grunt.task.registerTask('loadConfig', 'Task that loads the config into a grunt option.', function() {
-		
+	grunt.task.registerTask('loadConfig', 'Task that loads the config into a grunt option.', function () {
+
 		var init = require('./config/init')();
 		var config = require('./config/config');
 

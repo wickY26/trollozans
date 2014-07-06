@@ -5,11 +5,8 @@ module.exports = {
 	assets: {
 		lib: {
 			css: [
-				'public/lib/theme/css/bootstrap.css',
 				'public/lib/select2/select2.css',
 				'public/lib/select2-bootstrap-css/select2-bootstrap.css',
-				'public/lib/theme/css/font-awesome.min.css',
-				'public/lib/theme/css/style.css',
 				'public/lib/angular-busy/dist/angular-busy.min.css'
 			],
 			js: [

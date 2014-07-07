@@ -157,6 +157,22 @@ exports.list = function (req, res) {
 		});
 };
 
+exports.getWithUnApproveCount = function (req, res) {
+	var topicList = [];
+	Topic.find().sort('-created')
+		.lean(true)
+		.exec(function (err, topics) {
+			if (err) {
+				return res.send(400, {
+					message: getErrorMessage(err)
+				});
+			} else {
+				topicList.push(topics);
+				res.jsonp(topicList);
+			}
+		});
+};
+
 /**
  * Topic middleware
  */

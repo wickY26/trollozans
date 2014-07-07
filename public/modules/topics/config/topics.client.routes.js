@@ -13,10 +13,6 @@ angular.module('topics').config(['$stateProvider',
 			url: '/topics/:topicId',
 			templateUrl: 'modules/topics/views/detail-topic.client.view.html'
 		}).
-		state('listTopics', {
-			url: '/admin/topics',
-			templateUrl: 'modules/topics/views/list-topics.client.view.html'
-		}).
 		state('createTopic', {
 			url: '/admin/topics/create',
 			templateUrl: 'modules/topics/views/create-topic.client.view.html'

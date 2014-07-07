@@ -20,12 +20,7 @@
                         <h5>Likes</h5>
                         <h2>{{topic.usersLiked.length}}</h2>
                     </li>
-                    <li class="likes" data-ng-if="!_canLike()">
-                        <a class="btn btn-primary btn backcolor" data-ng-click="like()"><i class="fa fa-thumbs-up"></i> Like</a>
-                    </li>
-                    <li class="likes" data-ng-if="_canLike()">
-                        <a class="btn btn-primary btn backcolor" data-ng-click="unlike()"><i class="fa fa-thumbs-down"></i> Unlike</a>
-                    </li>
+                    <li class="likes"><div data-like-button data-like-array="topic.usersLiked" data-like="like()" data-unlike="unlike()" data-user="user"></li>
                 </ul>
             </div>
             <!-- Video Stats End --> 

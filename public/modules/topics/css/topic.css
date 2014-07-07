@@ -34,3 +34,7 @@
 	width: 100%;
 	float: left;
 }
+
+.likes i{
+	margin-right: 10px;
+}

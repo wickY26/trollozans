@@ -63,10 +63,6 @@ angular.module('topics').directive('contentWrapper', ['$sce', '$location',
 						}
 					}
 				});
-				// can current user like this topic
-				$scope._canLike = function () {
-					return _.contains($scope.topic.usersLiked, $scope.user._id);
-				};
 				// pageUrl of topic for social share
 				$scope.pageUrl = $location.absUrl();
 				// imgUrl of topic for social share
@@ -99,10 +95,6 @@ angular.module('topics').directive('contentBox', function () {
 		restrict: 'EA',
 		link: function ($scope, iElm, iAttrs, controller) {
 			$scope.thumbnailSrc = getSource($scope.topic.content.type, $scope.topic.content.reference);
-			// can current user like this topic
-			$scope._canLike = function () {
-				return _.contains($scope.topic.usersLiked, $scope.user._id);
-			};
 		}
 	};
 });

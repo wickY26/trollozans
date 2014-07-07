@@ -21,7 +21,7 @@ angular.module('topics').controller('DetailTopicController', ['$scope', '$stateP
 		// Unlike Topic
 		$scope.unlikeTopic = function (topic) {
 			Topics.one('unlike').one(topic._id).put();
-			topic.usersLiked = _.remove(topic.usersLiked, $scope.authentication.user._id);
+			topic.usersLiked = _.without(topic.usersLiked, $scope.authentication.user._id);
 		};
 
 		// Find a list of Poems of Topic

@@ -5,14 +5,14 @@
 		<div class="custom-container">
 	    	<div class="row">
 	            <!-- Top Categories Start -->
-	            <div class="col-lg-10 col-md-10 col-sm-8 col-xs-6">
+	            <div class="col-lg-10 col-md-10 col-sm-8 col-xs-12">
 	                <div class="logo">
                     	<a href="/#!/"><img src="/assets/images/logo2.png" alt="Video Magazine" /></a>
                     </div>
 	            </div>
 	            <!-- Top Categories End -->
 	            <!-- Social Network Start -->
-	            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
+	            <div class="col-lg-2 col-md-2 col-sm-4 hidden-xs">
 	            	<div class="socialnetworks">
 	                    <ul class="pull-right">
 	                        <li>
@@ -28,16 +28,6 @@
 	                        <li>
 	                        	<a href="#" data-toggle="tooltip" title="Twitter" data-placement="bottom" class="twitter">
 	                            	<i class="fa fa-twitter"></i>
-	                            </a>
-	                        </li>
-	                        <li>
-	                        	<a href="#" data-toggle="tooltip" title="Vimeo" data-placement="bottom" class="vimeo">
-	                            	<i class="fa fa-vimeo-square"></i>
-	                            </a>
-	                        </li>
-	                        <li>
-	                        	<a href="#" data-toggle="tooltip" title="Pinterest" data-placement="bottom" class="pinterest">
-	                            	<i class="fa fa-pinterest"></i>
 	                            </a>
 	                        </li>
 	                    </ul>
@@ -218,7 +208,7 @@
                     </div>
                     <div class="loginsec pull-right" data-ng-show="authentication.user">
                         <a href="/#!/settings/profile" class="colorhover"><i class="fa fa-user"></i>{{authentication.user.displayName}}</a>
-                        <a href="/auth/signout" class="colorhover"><i class="fa fa-sign-out"></i>Sign Out</a>
+                        <a href="/auth/signout" class="colorhover hidden-xs"><i class="fa fa-sign-out"></i>Sign Out</a>
                     </div>
                 </div>
                 <!-- Login End -->

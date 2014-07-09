@@ -124,7 +124,10 @@ exports.delete = function (req, res) {
  */
 exports.list = function (req, res) {
 	var topicList = [];
-	Topic.find().sort('-created')
+	Topic.find()
+		.sort('-created')
+		.skip(req.query.start)
+		.limit(req.query.offset)
 		.populate('creator', 'displayName')
 		.lean(true)
 		.exec(function (err, topics) {

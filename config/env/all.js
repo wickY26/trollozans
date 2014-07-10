@@ -2,8 +2,8 @@
 
 module.exports = {
 	app: {
-		title: 'trollozans',
-		description: 'Troll Ozans',
+		title: 'Troll Ozanlar',
+		description: 'Troll Ozans. Güncel konular üzerinden şiir yazarak geyik yapabileceğiniz platform',
 		keywords: 'fun'
 	},
 	port: process.env.PORT || 3000,

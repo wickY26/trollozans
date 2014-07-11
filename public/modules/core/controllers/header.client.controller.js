@@ -15,12 +15,10 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
 			$scope.isCollapsed = false;
 		});
 
-		// Find a list of Topics with top three Poems
-		$scope.findTopics = function () {
+		// Find Popular Topics
+		$scope.findPopularTopics = function () {
 			// popular topics
-			Topics.getList().then(function (topics) {
-				$scope.topics = topics.splice(0, 6);
-			});
+			$scope.topics = Topics.popularTopics();
 		};
 	}
 ]);

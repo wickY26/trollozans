@@ -20,7 +20,7 @@ angular.module('topics').controller('MainTopicsController', ['$scope', '$statePa
 				offset: offset
 			};
 			// Topics Promise Object for Loading Indicator
-			$scope.topicsPromise = Topics.getList(query);
+			$scope.topicsPromise = Topics.findTopics(query);
 			$scope.topicsPromise.then(function (topics) {
 				// Add New Topics to Current Topics
 				$scope.topics = $scope.topics.concat(topics);
@@ -29,13 +29,13 @@ angular.module('topics').controller('MainTopicsController', ['$scope', '$statePa
 
 		// Like Topic
 		$scope.likeTopic = function (topic) {
-			Topics.one('like').one(topic._id).put();
+			Topics.likeTopic(topic._id);
 			topic.usersLiked.push($scope.authentication.user._id);
 		};
 
 		// Unlike Topic
 		$scope.unlikeTopic = function (topic) {
-			Topics.one('unlike').one(topic._id).put();
+			Topics.unlikeTopic(topic._id);
 			topic.usersLiked = _.without(topic.usersLiked, $scope.authentication.user._id);
 		};
 	}

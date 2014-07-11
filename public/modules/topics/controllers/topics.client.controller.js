@@ -10,7 +10,7 @@ angular.module('topics').controller('TopicsController', ['$scope', '$stateParams
 			// set original values from select2 fields
 			this.topic.content.type = Constants.convertFromSelect2(this.topic.content.type);
 
-			Topics.post(this.topic).then(function (response) {
+			Topics.createTopic(this.topic).then(function (response) {
 				$location.path('topics/' + response._id);
 			}, function (errorResponse) {
 				$scope.error = errorResponse.data.message;

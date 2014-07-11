@@ -38,3 +38,16 @@
 .likes i{
 	margin-right: 10px;
 }
+
+.fill {
+	height: 200px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden
+}
+.fill img {
+    flex-shrink:0;
+    min-width:100%;
+    min-height:100%
+}

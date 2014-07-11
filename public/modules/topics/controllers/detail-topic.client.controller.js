@@ -7,7 +7,7 @@ angular.module('topics').controller('DetailTopicController', ['$scope', '$stateP
 		// Find existing Topic
 		$scope.findTopic = function () {
 			// topic promise object for loading indicator
-			$scope.topicPromise = Topics.one($stateParams.topicId).get();
+			$scope.topicPromise = Topics.findTopic($stateParams.topicId);
 			$scope.topicPromise.then(function (topic) {
 				$scope.topic = topic;
 			});
@@ -15,25 +15,27 @@ angular.module('topics').controller('DetailTopicController', ['$scope', '$stateP
 
 		// Like Topic
 		$scope.likeTopic = function (topic) {
-			Topics.one('like').one(topic._id).put();
+			Topics.likeTopic(topic._id);
 			topic.usersLiked.push($scope.authentication.user._id);
 		};
 		// Unlike Topic
 		$scope.unlikeTopic = function (topic) {
-			Topics.one('unlike').one(topic._id).put();
+			Topics.unlikeTopic(topic._id);
 			topic.usersLiked = _.without(topic.usersLiked, $scope.authentication.user._id);
 		};
 
 		// Find a list of Poems of Topic
 		$scope.findPoems = function () {
-			$scope.poems = Topics.one('poems').all($stateParams.topicId).getList().$object;
+			$scope.poems = Topics.findTopicPoems($stateParams.topicId).$object;
 		};
 
 		// Create new Poem for Topic
 		$scope.createPoem = function () {
-			// set topic of poem
-			Topics.one('poems').all($stateParams.topicId).post(this.poem).then(function (response) {
+			// topic promise object for loading indicator
+			$scope.topicPromise = Topics.createTopicPoem($stateParams.topicId, this.poem);
+			$scope.topicPromise.then(function (response) {
 				console.log(response);
+				alert('Your poem posted successfully...');
 			}, function (errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});

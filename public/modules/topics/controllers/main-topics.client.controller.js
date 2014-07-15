@@ -1,8 +1,9 @@
 'use strict';
 
-angular.module('topics').controller('MainTopicsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Topics',
-	function ($scope, $stateParams, $location, Authentication, Topics) {
+angular.module('topics').controller('MainTopicsController', ['$scope', '$stateParams', '$location', 'Authentication', 'UserProfile', 'Topics',
+	function ($scope, $stateParams, $location, Authentication, UserProfile, Topics) {
 		$scope.authentication = Authentication;
+		$scope.userProfile = UserProfile;
 
 		// Initial Function of Controller
 		$scope.init = function () {

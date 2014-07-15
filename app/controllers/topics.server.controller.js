@@ -5,6 +5,7 @@
  */
 var mongoose = require('mongoose'),
 	Topic = mongoose.model('Topic'),
+	User = mongoose.model('User'),
 	async = require('async'),
 	_ = require('lodash');
 
@@ -123,46 +124,21 @@ exports.delete = function (req, res) {
  * List of Topics
  */
 exports.list = function (req, res) {
-	var topicList = [];
 	Topic.find()
 		.sort('-created')
 		.skip(req.query.start)
 		.limit(req.query.offset)
 		.populate('creator', 'displayName')
-		.lean(true)
-		.exec(function (err, topics) {
-			async.each(topics, function (topic, callback) {
-				Topic.findById(topic._id)
-					.populate({
-						path: 'poems',
-						match: {
-							isApproved: true
-						},
-						sort: '-created',
-						options: {
-							limit: 3
-						}
-					})
-					.lean(true)
-					.exec(function (err, topic) {
-						topicList.push(topic);
-						callback(err);
-					});
-			}, function (err) {
-				if (err) {
-					return res.send(400, {
-						message: getErrorMessage(err)
-					});
-				} else {
-					res.jsonp(topicList);
-				}
-			});
-		});
-};
-
-exports.getWithUnApproveCount = function (req, res) {
-	var topicList = [];
-	Topic.find().sort('-created')
+		.populate({
+			path: 'poems',
+			match: {
+				isApproved: true
+			},
+			sort: '-created',
+			options: {
+				limit: 3
+			}
+		})
 		.lean(true)
 		.exec(function (err, topics) {
 			if (err) {
@@ -170,8 +146,43 @@ exports.getWithUnApproveCount = function (req, res) {
 					message: getErrorMessage(err)
 				});
 			} else {
-				topicList.push(topics);
-				res.jsonp(topicList);
+				User.populate(topics, {
+					path: 'poems.author'
+				}, function (err, topics) {
+					if (err) {
+						return res.send(400, {
+							message: getErrorMessage(err)
+						});
+					} else {
+						res.jsonp(topics);
+					}
+				});
+
+			}
+		});
+};
+
+exports.listByUnapproveCount = function (req, res) {
+	Topic.find()
+		.sort('-created')
+		.skip(req.query.start)
+		.limit(req.query.offset)
+		.populate('creator', 'displayName')
+		.populate({
+			path: 'poems',
+			match: {
+				isApproved: false
+			},
+			sort: '-created',
+		})
+		.lean(true)
+		.exec(function (err, topics) {
+			if (err) {
+				return res.send(400, {
+					message: getErrorMessage(err)
+				});
+			} else {
+				res.jsonp(topics);
 			}
 		});
 };

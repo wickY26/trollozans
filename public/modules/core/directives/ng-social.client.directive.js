@@ -153,7 +153,7 @@ angular.module('core').directive('ngSocialTwitter', function () {
 			}
 		},
 		popup: {
-			url: 'http://twitter.com/intent/tweet?url={url}&text={title}&related=trollozans&hashtags=trollozans',
+			url: 'http://twitter.com/intent/tweet?url={url}&text={title}&related=trollozans&via=trollozans',
 			width: 600,
 			height: 450
 		},

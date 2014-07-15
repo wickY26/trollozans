@@ -1,8 +1,9 @@
 'use strict';
 
-angular.module('topics').controller('DetailTopicController', ['$scope', '$stateParams', '$location', 'Authentication', 'Topics', 'Poems',
-	function ($scope, $stateParams, $location, Authentication, Topics, Poems) {
+angular.module('topics').controller('DetailTopicController', ['$scope', '$stateParams', '$location', 'Authentication', 'UserProfile', 'Topics', 'Poems',
+	function ($scope, $stateParams, $location, Authentication, UserProfile, Topics, Poems) {
 		$scope.authentication = Authentication;
+		$scope.userProfile = UserProfile;
 
 		// Find existing Topic
 		$scope.findTopic = function () {

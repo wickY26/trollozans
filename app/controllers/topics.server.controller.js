@@ -6,6 +6,7 @@
 var mongoose = require('mongoose'),
 	Topic = mongoose.model('Topic'),
 	User = mongoose.model('User'),
+	Poem = mongoose.model('Poem'),
 	async = require('async'),
 	_ = require('lodash');
 
@@ -129,16 +130,6 @@ exports.list = function (req, res) {
 		.skip(req.query.start)
 		.limit(req.query.offset)
 		.populate('creator', 'displayName')
-		.populate({
-			path: 'poems',
-			match: {
-				isApproved: true
-			},
-			sort: '-created',
-			options: {
-				limit: 3
-			}
-		})
 		.lean(true)
 		.exec(function (err, topics) {
 			if (err) {
@@ -146,15 +137,37 @@ exports.list = function (req, res) {
 					message: getErrorMessage(err)
 				});
 			} else {
-				User.populate(topics, {
-					path: 'poems.author'
+				Poem.populate(topics, {
+					path: 'poems',
+					match: {
+						isApproved: true
+					},
+					sort: '-created',
+					options: {
+						limit: 3
+					}
 				}, function (err, topics) {
 					if (err) {
 						return res.send(400, {
 							message: getErrorMessage(err)
 						});
 					} else {
-						res.jsonp(topics);
+						User.populate(topics, {
+							path: 'poems.author'
+						}, function (err, topics) {
+							if (err) {
+								return res.send(400, {
+									message: getErrorMessage(err)
+								});
+							} else {
+								_.forEach(topics, function (topic) {
+									if (_.size(topic.poems) > 3) {
+										topic.poems = topic.poems.slice(0, 3);
+									}
+								});
+								res.jsonp(topics);
+							}
+						});
 					}
 				});
 

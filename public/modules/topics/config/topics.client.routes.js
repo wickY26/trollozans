@@ -12,18 +12,7 @@ angular.module('topics').config(['$stateProvider',
 		state('detail-topic', {
 			url: '/topics/:topicId',
 			templateUrl: 'modules/topics/views/detail-topic.client.view.html'
-		}).
-		state('createTopic', {
-			url: '/admin/topics/create',
-			templateUrl: 'modules/topics/views/create-topic.client.view.html'
-		}).
-		state('viewTopic', {
-			url: '/admin/topics/:topicId',
-			templateUrl: 'modules/topics/views/view-topic.client.view.html'
-		}).
-		state('editTopic', {
-			url: '/admin/topics/:topicId/edit',
-			templateUrl: 'modules/topics/views/edit-topic.client.view.html'
 		});
+
 	}
 ]);

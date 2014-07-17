@@ -5,26 +5,11 @@ angular.module('topics').controller('TopicsController', ['$scope', '$stateParams
 	function ($scope, $stateParams, $location, Authentication, Topics, Poems, Constants) {
 		$scope.authentication = Authentication;
 
-		// Create new Topic
-		$scope.create = function () {
-			// set original values from select2 fields
-			this.topic.content.type = Constants.convertFromSelect2(this.topic.content.type);
-
-			Topics.createTopic(this.topic).then(function (response) {
-				$location.path('topics/' + response._id);
-			}, function (errorResponse) {
-				$scope.error = errorResponse.data.message;
-			});
-
-			// Clear form fields
-			this.topic = {};
-		};
-
 		// Create new Poem
 		$scope.createPoem = function (topicId) {
 			// set topic of poem
 			this.poem.topic = topicId;
-
+			console.log(topicId);
 			Topics.one('poems').all(topicId).post(this.poem).then(function (response) {
 				console.log(response);
 			}, function (errorResponse) {
@@ -66,14 +51,6 @@ angular.module('topics').controller('TopicsController', ['$scope', '$stateParams
 			Topics.one('poems').one($scope.topics[index]._id).get().then(function (topic) {
 				console.log(topic.poems);
 				$scope.poems = topic.poems;
-			});
-		};
-
-		// Find existing Topic
-		$scope.findOne = function () {
-			Topics.one($stateParams.topicId).get().then(function (topic) {
-				topic.content.type = Constants.convertToSelect2(topic.content.type, 'contentTypes');
-				$scope.topic = topic;
 			});
 		};
 

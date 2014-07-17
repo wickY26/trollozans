@@ -38,6 +38,9 @@ exports.create = function (req, res, next) {
 	var poem = new Poem(req.body);
 	poem.author = req.user;
 
+	if (_.contains(req.user.roles, 'admin')) {
+		poem.isApproved = true;
+	}
 	poem.save(function (err, poem) {
 		if (poem) {
 			req.poem = poem;

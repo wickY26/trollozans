@@ -28,7 +28,7 @@ angular.module('topics').factory('Topics', ['Restangular',
 				return Restangular.service('topics/poems').one(topicId).getList();
 			},
 			createTopicPoem: function (topicId, poem) {
-				return Restangular.service('topics/poems').one(topicId).post(poem);
+				return Restangular.service('topics/poems/' + topicId).post(poem);
 			},
 			popularTopics: function () {
 				if (popularTopics) return popularTopics;

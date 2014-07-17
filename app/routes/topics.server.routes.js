@@ -11,9 +11,7 @@ module.exports = function (app) {
 		.post(users.requiresLogin, topics.hasPermission, topics.validate, topics.create);
 
 	app.route('/topics/:topicId')
-		.get(topics.read)
-		.put(users.requiresLogin, topics.hasPermission, topics.hasAuthorization, topics.validate, topics.update)
-		.delete(users.requiresLogin, topics.hasPermission, topics.hasAuthorization, topics.delete);
+		.get(topics.read);
 
 	app.route('/topics/poems/:topicId')
 		.get(poems.list)

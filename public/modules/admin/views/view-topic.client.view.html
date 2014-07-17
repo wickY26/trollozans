@@ -1,0 +1,24 @@
+<section data-ng-controller="AdminController" data-ng-init="findOne()">
+	<div class="page-header">
+		<h1 data-ng-bind="topic.title"></h1>
+	</div>
+	<div class="row">
+	    <div class="col-sm-6">
+	        <pre>{{topic | json}}</pre>
+	        <small>
+	        	<em class="text-muted">Posted on <span data-ng-bind="topic.created | date:'mediumDate'"></span> by <span data-ng-bind="topic.creator.displayName"></span></em>
+	        </small>
+	        <div class="pull-right">
+	        	<a class="btn btn-primary" href="/#!/admin/topics/{{topic._id}}/edit">
+	        		<i class="glyphicon glyphicon-edit"></i>
+	        	</a>
+	        	<a class="btn btn-primary" data-ng-click="remove(topic)">
+	        		<i class="glyphicon glyphicon-trash"></i>
+	        	</a>
+	        </div>
+	    </div>
+	    <div class="col-sm-6">
+	        <div data-content-wrapper data-type="topic.content.type.id" data-reference="topic.content.reference"></div>
+	    </div>
+	</div>
+</section>

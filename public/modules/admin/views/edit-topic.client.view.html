@@ -1,0 +1,49 @@
+<section data-ng-controller="AdminController" data-ng-init="findOne()">
+    <div class="col-sm-6">
+        <div class="page-header">
+            <h1>Edit Topic</h1>
+        </div>
+        <form data-ng-submit="update()" novalidate>
+            <fieldset>
+                <div class="form-group">
+                    <label class="control-label" for="title">Title</label>
+                    <div>
+                        <input type="text" data-ng-model="topic.title" id="title" class="form-control" placeholder="Title" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="description">Description</label>
+                    <div>
+                        <textarea data-ng-model="topic.description" id="description" class="form-control" rows="4" placeholder="Description"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="content_type">Content Type</label>
+                    <div>
+                        <input type="hidden" data-ui-select2="contentTypeOptions" data-ng-model="topic.content.type" id="content_type" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="content_reference">Content Reference</label>
+                    <div>
+                        <input type="text" data-ng-model="topic.content.reference" id="content_reference" class="form-control" placeholder="Content Reference" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div>
+                        <input type="submit" class="btn btn-primary">
+                    </div>
+                </div>
+                <div data-ng-show="error" class="text-danger">
+                    <strong data-ng-bind="error"></strong>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="col-sm-6">
+        <div class="page-header">
+            <h1>Preview</h1>
+        </div>
+        <div data-content-wrapper data-type="topic.content.type.id" data-reference="topic.content.reference" data-editable></div>
+    </div>
+</section>

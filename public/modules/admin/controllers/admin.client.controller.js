@@ -26,7 +26,7 @@ angular.module('admin').controller('AdminController', ['$scope', '$stateParams',
 
 		// Find existing Topic
 		$scope.findOne = function () {
-			Admin.one('topics').one($stateParams.topicId).get().then(function (topic) {
+			Admin.one('topics',$stateParams.topicId).get().then(function (topic) {
 				topic.content.type = Constants.convertToSelect2(topic.content.type, 'contentTypes');
 				$scope.topic = topic;
 			});
@@ -50,6 +50,21 @@ angular.module('admin').controller('AdminController', ['$scope', '$stateParams',
 
 			// Clear form fields
 			this.topic = {};
+		};
+
+		// Update existing Topic
+		$scope.update = function () {
+			var topic = $scope.topic;
+
+			// set original values from select2 fields
+			topic.content.type = Constants.convertFromSelect2(topic.content.type);
+			delete topic.poems;
+
+			topic.save().then(function () {
+				$location.path('topics/' + topic._id);
+			}, function (errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
 		};
 	}
 ]);

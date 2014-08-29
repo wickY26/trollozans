@@ -13,4 +13,7 @@
     <div class="alert alert-warning text-center" data-ng-hide="!topics.$resolved || topics.length">
         No Topics yet, why don't you <a href="/#!/admin/topics/create">create one</a>?
     </div>
+    <div class="alert alert-danger text-center" data-ng-show="!topics.$resolved || topics.length">
+        Not enough topic, why don't you <a href="/#!/admin/topics/create">create one</a>?
+    </div>
 </section>

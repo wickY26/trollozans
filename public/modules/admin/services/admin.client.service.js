@@ -7,6 +7,6 @@
  */
 angular.module('admin').factory('Admin', ['Restangular',
 	function (Restangular) {
-		return Restangular.one('admin');
+		return Restangular.all('admin');
 	}
 ]);

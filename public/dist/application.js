@@ -12,7 +12,9 @@ var ApplicationConfiguration = function () {
         'ui.router',
         'ui.bootstrap',
         'ui.utils',
-        'ui.select2'
+        'ui.select2',
+        'restangular',
+        'cgBusy'
       ];
     // Add a new vertical module
     var registerModule = function (moduleName) {
@@ -44,35 +46,186 @@ angular.element(document).ready(function () {
   //Then init the app
   angular.bootstrap(document, [ApplicationConfiguration.applicationModuleName]);
 });'use strict';
+/**
+ * Admin Module
+ */
+ApplicationConfiguration.registerModule('admin');'use strict';
 // Use Applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('core');'use strict';
 // Use applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('poems');'use strict';
 // Use applicaion configuration module to register a new module
-ApplicationConfiguration.registerModule('tags');'use strict';
-// Use applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('topics');'use strict';
 // Use Applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('users');'use strict';
+/**
+ * Angular Client Rules for Admin Pages
+ */
+angular.module('admin').config([
+  '$stateProvider',
+  function ($stateProvider) {
+    // Topics state routing
+    $stateProvider.state('listTopics', {
+      url: '/admin/topics',
+      templateUrl: 'modules/admin/views/list-topics.client.view.html'
+    }).state('createTopic', {
+      url: '/admin/topics/create',
+      templateUrl: 'modules/admin/views/create-topic.client.view.html'
+    }).state('viewTopic', {
+      url: '/admin/topics/:topicId',
+      templateUrl: 'modules/admin/views/view-topic.client.view.html'
+    }).state('editTopic', {
+      url: '/admin/topics/:topicId/edit',
+      templateUrl: 'modules/admin/views/edit-topic.client.view.html'
+    }).state('listPoems', {
+      url: '/admin/poems',
+      templateUrl: 'modules/admin/views/list-poems.client.view.html'
+    });
+  }
+]);'use strict';
+/**
+ * Admin Controller for admin jobs.
+ * @param  {[type]} $scope         [description]
+ * @param  {[type]} $stateParams   [description]
+ * @param  {[type]} $location      [description]
+ * @param  {[type]} Authentication [description]
+ * @param  {[type]} Admin          [description]
+ * @return {[type]}                [description]
+ */
+angular.module('admin').controller('AdminController', [
+  '$scope',
+  '$stateParams',
+  '$location',
+  'Authentication',
+  'Admin',
+  'Poems',
+  'Constants',
+  function ($scope, $stateParams, $location, Authentication, Admin, Poems, Constants) {
+    $scope.authentication = Authentication;
+    /**
+		 * Gets Topics for admins. Admin topics have unapprove poem counts
+		 * @return {[type]} [description]
+		 */
+    $scope.findTopics = function () {
+      $scope.topics = Admin.one('topics').getList().$object;
+    };
+    // Find existing Topic
+    $scope.findOne = function () {
+      Admin.one('topics', $stateParams.topicId).get().then(function (topic) {
+        topic.content.type = Constants.convertToSelect2(topic.content.type, 'contentTypes');
+        $scope.topic = topic;
+      });
+    };
+    // contentType select2 options
+    $scope.contentTypeOptions = {
+      placeholder: 'Select Content Type',
+      data: Constants.createSelect2Data('contentTypes')
+    };
+    // Create new Topic
+    $scope.create = function () {
+      // set original values from select2 fields
+      this.topic.content.type = Constants.convertFromSelect2(this.topic.content.type);
+      Admin.post(this.topic).then(function (response) {
+        $location.path('topics/' + response._id);
+      }, function (errorResponse) {
+        $scope.error = errorResponse.data.message;
+      });
+      // Clear form fields
+      this.topic = {};
+    };
+    // Update existing Topic
+    $scope.update = function () {
+      var topic = $scope.topic;
+      // set original values from select2 fields
+      topic.content.type = Constants.convertFromSelect2(topic.content.type);
+      delete topic.poems;
+      topic.save().then(function () {
+        $location.path('topics/' + topic._id);
+      }, function (errorResponse) {
+        $scope.error = errorResponse.data.message;
+      });
+    };
+    // find poems those wating for an approval
+    $scope.findUnapprovedPoems = function () {
+      $scope.poemPromise = Poems.one('waitingForApproval').getList();
+      $scope.poemPromise.then(function (poems) {
+        $scope.poems = poems;
+      });
+    };
+    $scope.approvePoem = function (poem, index) {
+      $scope.poemPromise = Poems.one('approve').one(poem._id).put();
+      $scope.poemPromise.then(function (response) {
+        $scope.poems.splice(index, 1);
+      });
+    };
+  }
+]);'use strict';
+/**
+ * Restangular Service For Admin operations
+ * @param  {[type]} Restangular) {		return    Restangular.service('admin');	}] [description]
+ * @return {[type]}              [description]
+ */
+angular.module('admin').factory('Admin', [
+  'Restangular',
+  function (Restangular) {
+    return Restangular.one('admin');
+  }
+]);'use strict';
+// Setting up restangular
+angular.module('core').config([
+  'RestangularProvider',
+  function (RestangularProvider) {
+    // set the id field to _id for mongoDB integration
+    RestangularProvider.setRestangularFields({ id: '_id' });
+    // using JSonp instead of the regular GET
+    RestangularProvider.setDefaultRequestParams('jsonp', { callback: 'JSON_CALLBACK' });
+  }
+]);'use strict';
 // Setting up route
 angular.module('core').config([
   '$stateProvider',
   '$urlRouterProvider',
   function ($stateProvider, $urlRouterProvider) {
     // Redirect to home view when route not found
-    $urlRouterProvider.otherwise('/');
+    $urlRouterProvider.otherwise('/topics');
     // Home state routing
     $stateProvider.state('home', {
       url: '/',
-      templateUrl: 'modules/core/views/home.client.view.html'
+      templateUrl: 'modules/topics/views/main-topics.client.view.html'
     });
+  }
+]);'use strict';
+// Setting up select2
+angular.module('core').run([
+  'uiSelect2Config',
+  function (uiSelect2Config) {
+    // init selection should be there even it is an empty function
+    // otherwise select2 will throw error
+    uiSelect2Config.initSelection = function () {
+    };
+    // defeault placeholder text
+    uiSelect2Config.placeholder = 'Please Select';
+    // single select is default
+    uiSelect2Config.multiple = false;
+  }
+]);'use strict';
+angular.module('core').controller('FooterController', [
+  '$scope',
+  'Topics',
+  function ($scope, Topics) {
+    // Find Popular Topics
+    $scope.findPopularTopics = function () {
+      // popular topics
+      $scope.topics = Topics.popularTopics();
+    };
   }
 ]);'use strict';
 angular.module('core').controller('HeaderController', [
   '$scope',
   'Authentication',
   'Menus',
-  function ($scope, Authentication, Menus) {
+  'Topics',
+  function ($scope, Authentication, Menus, Topics) {
     $scope.authentication = Authentication;
     $scope.isCollapsed = false;
     $scope.menu = Menus.getMenu('topbar');
@@ -83,6 +236,11 @@ angular.module('core').controller('HeaderController', [
     $scope.$on('$stateChangeSuccess', function () {
       $scope.isCollapsed = false;
     });
+    // Find Popular Topics
+    $scope.findPopularTopics = function () {
+      // popular topics
+      $scope.topics = Topics.popularTopics();
+    };
   }
 ]);'use strict';
 angular.module('core').controller('HomeController', [
@@ -93,6 +251,303 @@ angular.module('core').controller('HomeController', [
     $scope.authentication = Authentication;
   }
 ]);'use strict';
+// Topics directive
+angular.module('topics').directive('bindUnsafeHtml', [
+  '$compile',
+  function ($compile) {
+    return function (scope, element, attrs) {
+      scope.$watch(function (scope) {
+        // watch the 'bindUnsafeHtml' expression for changes
+        return scope.$eval(attrs.bindUnsafeHtml);
+      }, function (value) {
+        // when the 'bindUnsafeHtml' expression changes
+        // assign it into the current DOM
+        element.html(value);
+        // compile the new DOM and link it to the current
+        // scope.
+        // NOTE: we only compile .childNodes so that
+        // we don't get into infinite loop compiling ourselves
+        $compile(element.contents())(scope);
+      });
+    };
+  }
+]);'use strict';
+angular.module('core').directive('likeButton', function () {
+  return {
+    template: '<div data-ng-if="user">' + '<a class="btn btn-primary btn-xs backcolor" data-ng-click="like()" data-ng-if="!_canLike()"><i class="fa fa-thumbs-up"></i>Like</a>' + '<a class="btn btn-primary btn-xs backcolor" data-ng-click="unlike()" data-ng-if="_canLike()"><i class="fa fa-thumbs-down"></i>Unlike</a>' + '</div>' + '<div data-ng-if="!user">' + '<a class="btn btn-primary btn-xs backcolor" href="/#!/signin"><i class="fa fa-thumbs-up"></i>Like</a>' + '</div>',
+    scope: {
+      likeArray: '=',
+      user: '=',
+      like: '&',
+      unlike: '&'
+    },
+    replace: false,
+    restrict: 'EA',
+    link: function postLink($scope, iElm, iAttrs, controller) {
+      // can current user like this topic
+      $scope._canLike = function () {
+        return _.contains($scope.likeArray, $scope.user._id);
+      };
+    }
+  };
+});'use strict';
+function template(tmpl, context, filter) {
+  return tmpl.replace(/\{([^\}]+)\}/g, function (m, key) {
+    // If key don't exists in the context we should keep template tag as is
+    return key in context ? filter ? filter(context[key]) : context[key] : m;
+  });
+}
+angular.module('core').directive('ngSocialButtons', [
+  '$compile',
+  '$q',
+  '$parse',
+  '$http',
+  function ($compile, $q, $parse, $http) {
+    return {
+      restrict: 'A',
+      scope: {
+        'url': '=',
+        'title': '=',
+        'description': '=',
+        'image': '='
+      },
+      replace: true,
+      transclude: true,
+      template: '<ul ng-transclude></ul>',
+      controller: [
+        '$scope',
+        '$q',
+        '$http',
+        function ($scope, $q, $http) {
+          var ctrl = {
+              init: function (scope, element, options) {
+                if (options.counter) {
+                  ctrl.getCount(scope.options).then(function (count) {
+                    scope.count = count;
+                  });
+                }
+              },
+              link: function (options) {
+                options = options || {};
+                var urlOptions = options.urlOptions || {};
+                urlOptions.url = $scope.url;
+                urlOptions.title = $scope.title;
+                urlOptions.image = $scope.image;
+                urlOptions.description = $scope.description || '';
+                return ctrl.makeUrl(options.clickUrl || options.popup.url, urlOptions);
+              },
+              clickShare: function (e, options) {
+                if (e.shiftKey || e.ctrlKey) {
+                  return;
+                }
+                e.preventDefault();
+                var process = true;
+                if (angular.isFunction(options.click)) {
+                  process = options.click.call(this, options);
+                }
+                if (process) {
+                  var url = ctrl.link(options);
+                  ctrl.openPopup(url, options.popup);
+                }
+              },
+              openPopup: function (url, params) {
+                var left = Math.round(screen.width / 2 - params.width / 2), top = 0;
+                if (screen.height > params.height) {
+                  top = Math.round(screen.height / 3 - params.height / 2);
+                }
+                var win = window.open(url, 'sl_' + this.service, 'left=' + left + ',top=' + top + ',' + 'width=' + params.width + ',height=' + params.height + ',personalbar=0,toolbar=0,scrollbars=1,resizable=1');
+                if (win) {
+                  win.focus();
+                } else {
+                  location.href = url;
+                }
+              },
+              getCount: function (options) {
+                var def = $q.defer();
+                var urlOptions = options.urlOptions || {};
+                urlOptions.url = $scope.url;
+                urlOptions.title = $scope.title;
+                var url = ctrl.makeUrl(options.counter.url, urlOptions);
+                if (options.counter.get) {
+                  options.counter.get(url, def, $http);
+                } else {
+                  $http.jsonp(url).success(function (res) {
+                    if (options.counter.getNumber) {
+                      def.resolve(options.counter.getNumber(res));
+                    } else {
+                      def.resolve(res);
+                    }
+                  });
+                }
+                return def.promise;
+              },
+              makeUrl: function (url, context) {
+                return template(url, context, encodeURIComponent);
+              }
+            };
+          return ctrl;
+        }
+      ]
+    };
+  }
+]);
+angular.module('core').directive('ngSocialFacebook', function () {
+  var options = {
+      counter: {
+        url: 'http://graph.facebook.com/fql?q=SELECT+total_count+FROM+link_stat+WHERE+url%3D%22{url}%22&callback=JSON_CALLBACK',
+        getNumber: function (data) {
+          return data.data[0].total_count;
+        }
+      },
+      popup: {
+        url: 'https://www.facebook.com/dialog/feed?app_id=145634995501895&display=popup&caption=An%20example%20caption&link=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fdialogs%2F&redirect_uri=https://developers.facebook.com/tools/explorer',
+        width: 600,
+        height: 500
+      }
+    };
+  return {
+    restrict: 'C',
+    require: '^?ngSocialButtons',
+    scope: true,
+    replace: true,
+    transclude: true,
+    template: '<li class="facebook">' + '<i class="fa fa-facebook"></i>' + '<div class="shaingstats">' + '<h5>{{count}}</h5>' + '<p>Shares</p>' + '</div>' + '<a ng-href="{{ctrl.link(options)}}" target="_blank" ng-click="ctrl.clickShare($event, options)" class="link"></a>' + '</li>',
+    controller: [
+      '$scope',
+      function ($scope) {
+      }
+    ],
+    link: function (scope, element, attrs, ctrl) {
+      element.addClass('ng-social-facebook');
+      if (!ctrl) {
+        return;
+      }
+      scope.options = options;
+      scope.ctrl = ctrl;
+      ctrl.init(scope, element, options);
+    }
+  };
+});
+angular.module('core').directive('ngSocialTwitter', function () {
+  var options = {
+      counter: {
+        url: 'http://urls.api.twitter.com/1/urls/count.json?url={url}&callback=JSON_CALLBACK',
+        getNumber: function (data) {
+          return data.count;
+        }
+      },
+      popup: {
+        url: 'http://twitter.com/intent/tweet?url={url}&text={title}&related=trollozans&via=trollozans',
+        width: 600,
+        height: 450
+      },
+      click: function (options) {
+        // Add colon to improve readability
+        if (!/[\.:\-–—]\s*$/.test(options.pageTitle))
+          options.pageTitle += ':';
+        return true;
+      }
+    };
+  return {
+    restrict: 'C',
+    require: '^?ngSocialButtons',
+    scope: true,
+    replace: true,
+    transclude: true,
+    template: '<li class="twitter">' + '<i class="fa fa-twitter"></i>' + '<div class="shaingstats">' + '<h5>{{count}}</h5>' + '<p>Tweets</p>' + '</div>' + '<a ng-href="{{ctrl.link(options)}}" target="_blank" ng-click="ctrl.clickShare($event, options)" class="link"></a>' + '</li>',
+    controller: [
+      '$scope',
+      function ($scope) {
+      }
+    ],
+    link: function (scope, element, attrs, ctrl) {
+      element.addClass('ng-social-twitter');
+      if (!ctrl) {
+        return;
+      }
+      scope.options = options;
+      scope.ctrl = ctrl;
+      ctrl.init(scope, element, options);
+    }
+  };
+});'use strict';
+angular.module('core').directive('stickyNav', [function () {
+    return {
+      restrict: 'EA',
+      link: function postLink(scope, element, attrs) {
+        var s = jQuery('.stickynav');
+        var pos = s.position();
+        jQuery(window).scroll(function () {
+          var windowpos = jQuery(window).scrollTop();
+          if (windowpos >= pos.top) {
+            s.addClass('stick');
+          } else {
+            s.removeClass('stick');
+          }
+        });
+      }
+    };
+  }]);'use strict';
+//Constant service used for managing  constants
+angular.module('core').service('Constants', [function () {
+    // Define content types
+    this.contentTypes = {
+      'image': 'Image',
+      'youtube': 'Youtube',
+      'dailymotion': 'Daily Motion'
+    };
+    // create select2 data array from given object reference 
+    this.createSelect2Data = function (reference) {
+      // select2 data array
+      var data = [];
+      // check object with given reference
+      if (this[reference]) {
+        angular.forEach(this[reference], function (value, key) {
+          data.push({
+            'id': key,
+            'text': value
+          });
+        });
+        return data;
+      } else {
+        console.error('No object with given reference');
+        return data;
+      }
+    };
+    // Convert select2 selected object to desired one
+    this.convertFromSelect2 = function (object, key) {
+      // if no key provided set it to id
+      key = key || 'id';
+      // result
+      var result;
+      // multiple selection
+      if (angular.isArray(object)) {
+        // initilize result array
+        result = [];
+        // get every values of object with given key and push it into result array
+        angular.forEach(object, function (value) {
+          result.push(value[key]);
+        });
+        return result;
+      }  // single selection
+      else if (angular.isObject(object)) {
+        result = object[key];
+        return result;
+      }
+    };
+    // Convert value to select2 data object
+    this.convertToSelect2 = function (value, reference) {
+      if (this[reference] && this[reference][value]) {
+        return {
+          'id': value,
+          'text': this[reference][value]
+        };
+      } else {
+        console.error('No object with given reference or given key');
+        return value;
+      }
+    };
+  }]);'use strict';
 //Menu service used for managing  menus
 angular.module('core').service('Menus', [function () {
     // Define a set of default roles
@@ -222,16 +677,15 @@ angular.module('core').service('Menus', [function () {
       return this.menus[menuId];
     };
     //Adding the topbar menu
-    this.addMenu('topbar');
+    this.addMenu('topbar', false, [
+      'author',
+      'admin'
+    ]);
   }]);'use strict';
 // Configuring the Articles module
 angular.module('poems').run([
   'Menus',
   function (Menus) {
-    // Set top bar menu items
-    Menus.addMenuItem('topbar', 'Poems', 'poems', 'dropdown', '/poems(/create)?');
-    Menus.addSubMenuItem('topbar', 'poems', 'List Poems', 'poems');
-    Menus.addSubMenuItem('topbar', 'poems', 'New Poem', 'poems/create');
   }
 ]);'use strict';
 //Setting up route
@@ -239,10 +693,7 @@ angular.module('poems').config([
   '$stateProvider',
   function ($stateProvider) {
     // Poems state routing
-    $stateProvider.state('listPoems', {
-      url: '/poems',
-      templateUrl: 'modules/poems/views/list-poems.client.view.html'
-    }).state('createPoem', {
+    $stateProvider.state('createPoem', {
       url: '/poems/create',
       templateUrl: 'modules/poems/views/create-poem.client.view.html'
     }).state('viewPoem', {
@@ -261,9 +712,7 @@ angular.module('poems').controller('PoemsController', [
   '$location',
   'Authentication',
   'Poems',
-  'Topics',
-  'Tags',
-  function ($scope, $stateParams, $location, Authentication, Poems, Topics, Tags) {
+  function ($scope, $stateParams, $location, Authentication, Poems) {
     $scope.authentication = Authentication;
     // Create new Poem
     $scope.create = function () {
@@ -288,18 +737,9 @@ angular.module('poems').controller('PoemsController', [
     };
     // Remove existing Poem
     $scope.remove = function (poem) {
-      if (poem) {
-        poem.$remove();
-        for (var i in $scope.poems) {
-          if ($scope.poems[i] === poem) {
-            $scope.poems.splice(i, 1);
-          }
-        }
-      } else {
-        $scope.poem.$remove(function () {
-          $location.path('poems');
-        });
-      }
+      $scope.poem.$remove(function () {
+        $location.path('poems');
+      });
     };
     // Update existing Poem
     $scope.update = function () {
@@ -316,120 +756,28 @@ angular.module('poems').controller('PoemsController', [
     };
     // Find existing Poem
     $scope.findOne = function () {
-      $scope.poem = Poems.get({ poemId: $stateParams.poemId });
+      $scope.poem = Poems.one($stateParams.poemId).get().$object;
     };
-    // Find a list of Topics
-    $scope.findTopics = function () {
-      $scope.topics = Topics.query();
+    // find poems those wating for an approval
+    $scope.findUnapprovedPoems = function () {
+      $scope.poemPromise = Poems.one('waitingForApproval').getList();
+      $scope.poemPromise.then(function (poems) {
+        $scope.poems = poems;
+      });
     };
-    // Find a list of Tags
-    $scope.findTags = function () {
-      $scope.tags = Tags.query();
+    $scope.approvePoem = function (poem, index) {
+      $scope.poemPromise = Poems.one('approve').one(poem._id).put();
+      $scope.poemPromise.then(function (response) {
+        $scope.poems.splice(index, 1);
+      });
     };
   }
 ]);'use strict';
 //Poems service used to communicate Poems REST endpoints
-angular.module('poems').factory('Poems', [
-  '$resource',
-  function ($resource) {
-    return $resource('poems/:poemId', { poemId: '@_id' }, { update: { method: 'PUT' } });
-  }
-]);'use strict';
-// Configuring the Articles module
-angular.module('tags').run([
-  'Menus',
-  function (Menus) {
-    // Set top bar menu items
-    Menus.addMenuItem('topbar', 'Tags', 'tags', 'dropdown', '/tags(/create)?');
-    Menus.addSubMenuItem('topbar', 'tags', 'List Tags', 'tags');
-    Menus.addSubMenuItem('topbar', 'tags', 'New Tag', 'tags/create');
-  }
-]);'use strict';
-//Setting up route
-angular.module('tags').config([
-  '$stateProvider',
-  function ($stateProvider) {
-    // Tags state routing
-    $stateProvider.state('listTags', {
-      url: '/tags',
-      templateUrl: 'modules/tags/views/list-tags.client.view.html'
-    }).state('createTag', {
-      url: '/tags/create',
-      templateUrl: 'modules/tags/views/create-tag.client.view.html'
-    }).state('viewTag', {
-      url: '/tags/:tagId',
-      templateUrl: 'modules/tags/views/view-tag.client.view.html'
-    }).state('editTag', {
-      url: '/tags/:tagId/edit',
-      templateUrl: 'modules/tags/views/edit-tag.client.view.html'
-    });
-  }
-]);'use strict';
-// Tags controller
-angular.module('tags').controller('TagsController', [
-  '$scope',
-  '$stateParams',
-  '$location',
-  'Authentication',
-  'Tags',
-  function ($scope, $stateParams, $location, Authentication, Tags) {
-    $scope.authentication = Authentication;
-    // Create new Tag
-    $scope.create = function () {
-      // Create new Tag object
-      var tag = new Tags({
-          title: this.title,
-          description: this.description
-        });
-      // Redirect after save
-      tag.$save(function (response) {
-        $location.path('tags/' + response._id);
-      }, function (errorResponse) {
-        $scope.error = errorResponse.data.message;
-      });
-      // Clear form fields
-      this.title = '';
-      this.description = '';
-    };
-    // Remove existing Tag
-    $scope.remove = function (tag) {
-      if (tag) {
-        tag.$remove();
-        for (var i in $scope.tags) {
-          if ($scope.tags[i] === tag) {
-            $scope.tags.splice(i, 1);
-          }
-        }
-      } else {
-        $scope.tag.$remove(function () {
-          $location.path('tags');
-        });
-      }
-    };
-    // Update existing Tag
-    $scope.update = function () {
-      var tag = $scope.tag;
-      tag.$update(function () {
-        $location.path('tags/' + tag._id);
-      }, function (errorResponse) {
-        $scope.error = errorResponse.data.message;
-      });
-    };
-    // Find a list of Tags
-    $scope.find = function () {
-      $scope.tags = Tags.query();
-    };
-    // Find existing Tag
-    $scope.findOne = function () {
-      $scope.tag = Tags.get({ tagId: $stateParams.tagId });
-    };
-  }
-]);'use strict';
-//Tags service used to communicate Tags REST endpoints
-angular.module('tags').factory('Tags', [
-  '$resource',
-  function ($resource) {
-    return $resource('tags/:tagId', { tagId: '@_id' }, { update: { method: 'PUT' } });
+angular.module('topics').factory('Poems', [
+  'Restangular',
+  function (Restangular) {
+    return Restangular.service('poems');
   }
 ]);'use strict';
 // Configuring the Articles module
@@ -437,9 +785,16 @@ angular.module('topics').run([
   'Menus',
   function (Menus) {
     // Set top bar menu items
-    Menus.addMenuItem('topbar', 'Topics', 'topics', 'dropdown', '/topics(/create)?');
-    Menus.addSubMenuItem('topbar', 'topics', 'List Topics', 'topics');
-    Menus.addSubMenuItem('topbar', 'topics', 'New Topic', 'topics/create');
+    Menus.addMenuItem('topbar', 'Admin-Topics', 'admin/topics', 'button', '/admin/topics', false, [
+      'author',
+      'admin'
+    ]);
+    Menus.addMenuItem('topbar', 'Admin-Poems', 'admin/poems', 'button', '/admin/poems', false, [
+      'author',
+      'admin'
+    ]);
+    // Set top bar menu items
+    Menus.addMenuItem('topbar', 'Topics', 'topics', 'button', '/topics', true);
   }
 ]);'use strict';
 //Setting up route
@@ -447,19 +802,104 @@ angular.module('topics').config([
   '$stateProvider',
   function ($stateProvider) {
     // Topics state routing
-    $stateProvider.state('listTopics', {
+    $stateProvider.state('mainTopics', {
       url: '/topics',
-      templateUrl: 'modules/topics/views/list-topics.client.view.html'
-    }).state('createTopic', {
-      url: '/topics/create',
-      templateUrl: 'modules/topics/views/create-topic.client.view.html'
-    }).state('viewTopic', {
+      templateUrl: 'modules/topics/views/main-topics.client.view.html'
+    }).state('detail-topic', {
       url: '/topics/:topicId',
-      templateUrl: 'modules/topics/views/view-topic.client.view.html'
-    }).state('editTopic', {
-      url: '/topics/:topicId/edit',
-      templateUrl: 'modules/topics/views/edit-topic.client.view.html'
+      templateUrl: 'modules/topics/views/detail-topic.client.view.html'
     });
+  }
+]);'use strict';
+angular.module('topics').controller('DetailTopicController', [
+  '$scope',
+  '$stateParams',
+  '$location',
+  'Authentication',
+  'UserProfile',
+  'Topics',
+  'Poems',
+  function ($scope, $stateParams, $location, Authentication, UserProfile, Topics, Poems) {
+    $scope.authentication = Authentication;
+    $scope.userProfile = UserProfile;
+    // Find existing Topic
+    $scope.findTopic = function () {
+      // topic promise object for loading indicator
+      $scope.topicPromise = Topics.findTopic($stateParams.topicId);
+      $scope.topicPromise.then(function (topic) {
+        $scope.topic = topic;
+      });
+    };
+    // Like Topic
+    $scope.likeTopic = function (topic) {
+      Topics.likeTopic(topic._id);
+      topic.usersLiked.push($scope.authentication.user._id);
+    };
+    // Unlike Topic
+    $scope.unlikeTopic = function (topic) {
+      Topics.unlikeTopic(topic._id);
+      topic.usersLiked = _.without(topic.usersLiked, $scope.authentication.user._id);
+    };
+    // Find a list of Poems of Topic
+    $scope.findPoems = function () {
+      $scope.poems = Topics.findTopicPoems($stateParams.topicId).$object;
+    };
+    // Create new Poem for Topic
+    $scope.createPoem = function () {
+      // topic promise object for loading indicator
+      $scope.topicPromise = Topics.createTopicPoem($stateParams.topicId, this.poem);
+      $scope.topicPromise.then(function (response) {
+        console.log(response);
+        alert('Your poem posted successfully...');
+      }, function (errorResponse) {
+        $scope.error = errorResponse.data.message;
+      });
+      // Clear form fields
+      this.poem = {};
+    };
+  }
+]);'use strict';
+angular.module('topics').controller('MainTopicsController', [
+  '$scope',
+  '$stateParams',
+  '$location',
+  'Authentication',
+  'UserProfile',
+  'Topics',
+  function ($scope, $stateParams, $location, Authentication, UserProfile, Topics) {
+    $scope.authentication = Authentication;
+    $scope.userProfile = UserProfile;
+    // Initial Function of Controller
+    $scope.init = function () {
+      // Create new Topic Array
+      $scope.topics = [];
+      // Find First Five Topics to Show
+      $scope.findTopics(0, 5);
+    };
+    // Find a list of Topics with top three Poems
+    $scope.findTopics = function (start, offset) {
+      // Query Object
+      var query = {
+          start: start,
+          offset: offset
+        };
+      // Topics Promise Object for Loading Indicator
+      $scope.topicsPromise = Topics.findTopics(query);
+      $scope.topicsPromise.then(function (topics) {
+        // Add New Topics to Current Topics
+        $scope.topics = $scope.topics.concat(topics);
+      });
+    };
+    // Like Topic
+    $scope.likeTopic = function (topic) {
+      Topics.likeTopic(topic._id);
+      topic.usersLiked.push($scope.authentication.user._id);
+    };
+    // Unlike Topic
+    $scope.unlikeTopic = function (topic) {
+      Topics.unlikeTopic(topic._id);
+      topic.usersLiked = _.without(topic.usersLiked, $scope.authentication.user._id);
+    };
   }
 ]);'use strict';
 // Topics controller
@@ -469,49 +909,35 @@ angular.module('topics').controller('TopicsController', [
   '$location',
   'Authentication',
   'Topics',
-  'Tags',
-  function ($scope, $stateParams, $location, Authentication, Topics, Tags) {
+  'Poems',
+  'Constants',
+  function ($scope, $stateParams, $location, Authentication, Topics, Poems, Constants) {
     $scope.authentication = Authentication;
-    // Create new Topic
-    $scope.create = function () {
-      // Create new Topic object
-      var topic = new Topics({
-          title: this.title,
-          content: this.content,
-          tags: [this.tag],
-          description: this.description
-        });
-      // Redirect after save
-      topic.$save(function (response) {
-        $location.path('topics/' + response._id);
+    // Create new Poem
+    $scope.createPoem = function (topicId) {
+      // set topic of poem
+      this.poem.topic = topicId;
+      console.log(topicId);
+      Topics.one('poems').all(topicId).post(this.poem).then(function (response) {
+        console.log(response);
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
       });
       // Clear form fields
-      this.title = '';
-      this.content = {};
-      this.tag = '';
-      this.description = '';
+      this.poem = {};
     };
     // Remove existing Topic
     $scope.remove = function (topic) {
-      if (topic) {
-        topic.$remove();
-        for (var i in $scope.topics) {
-          if ($scope.topics[i] === topic) {
-            $scope.topics.splice(i, 1);
-          }
-        }
-      } else {
-        $scope.topic.$remove(function () {
-          $location.path('topics');
-        });
-      }
+      $scope.topic.remove().then(function () {
+        $location.path('topics');
+      });
     };
     // Update existing Topic
     $scope.update = function () {
       var topic = $scope.topic;
-      topic.$update(function () {
+      // set original values from select2 fields
+      topic.content.type = Constants.convertFromSelect2(topic.content.type);
+      topic.put().then(function () {
         $location.path('topics/' + topic._id);
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
@@ -519,44 +945,181 @@ angular.module('topics').controller('TopicsController', [
     };
     // Find a list of Topics
     $scope.find = function () {
-      $scope.topics = Topics.query();
+      $scope.topics = Topics.getList().$object;
     };
-    // Find existing Topic
-    $scope.findOne = function () {
-      $scope.topic = Topics.get({ topicId: $stateParams.topicId });
+    // Find Poems of Topic
+    $scope.findPoems = function (index) {
+      Topics.one('poems').one($scope.topics[index]._id).get().then(function (topic) {
+        console.log(topic.poems);
+        $scope.poems = topic.poems;
+      });
     };
-    // Find a list of Tags
-    $scope.findTags = function () {
-      $scope.tags = Tags.query();
+    $scope.setCurrentTopic = function (index) {
+      $scope.currentTopic = index;
+    };
+    // Get full Topic
+    $scope.getFullTopic = function () {
+      Topics.one('full').one($stateParams.topicId).get().then(function (topic) {
+        console.log(topic);
+        $scope.topic = topic;
+      });
+    };
+    // contentType select2 options
+    $scope.contentTypeOptions = {
+      placeholder: 'Select Content Type',
+      data: Constants.createSelect2Data('contentTypes')
     };
   }
 ]);'use strict';
-// Topics directive
-angular.module('topics').directive('bindUnsafeHtml', [
-  '$compile',
-  function ($compile) {
-    return function (scope, element, attrs) {
-      scope.$watch(function (scope) {
-        // watch the 'bindUnsafeHtml' expression for changes
-        return scope.$eval(attrs.bindUnsafeHtml);
-      }, function (value) {
-        // when the 'bindUnsafeHtml' expression changes
-        // assign it into the current DOM
-        element.html(value);
-        // compile the new DOM and link it to the current
-        // scope.
-        // NOTE: we only compile .childNodes so that
-        // we don't get into infinite loop compiling ourselves
-        $compile(element.contents())(scope);
-      });
+/**
+ * content holder
+ */
+angular.module('topics').directive('contentBox', function () {
+  // get thumbnail source by type and reference
+  function getSource(type, reference) {
+    if (type === 'youtube')
+      return 'http://img.youtube.com/vi/' + reference + '/0.jpg';
+    if (type === 'dailymotion')
+      return 'http://www.dailymotion.com/thumbnail/video/' + reference;
+    if (type === 'image')
+      return reference;
+  }
+  // Runs during compile
+  return {
+    templateUrl: 'modules/topics/views/templates/contentBox-topic.client.view.html',
+    scope: {
+      topic: '=',
+      user: '=',
+      like: '&',
+      unlike: '&'
+    },
+    replace: true,
+    restrict: 'EA',
+    link: function ($scope, iElm, iAttrs, controller) {
+      $scope.thumbnailSrc = getSource($scope.topic.content.type, $scope.topic.content.reference);
+    }
+  };
+});'use strict';
+/**
+ * menu content holder
+ */
+angular.module('topics').directive('contentMenuBox', function () {
+  // get thumbnail source by type and reference
+  function getSource(type, reference) {
+    if (type === 'youtube')
+      return 'http://img.youtube.com/vi/' + reference + '/0.jpg';
+    if (type === 'dailymotion')
+      return 'http://www.dailymotion.com/thumbnail/video/' + reference;
+    if (type === 'image')
+      return reference;
+  }
+  // Runs during compile
+  return {
+    templateUrl: 'modules/topics/views/templates/contentMenuBox-topic.client.view.html',
+    scope: { topic: '=' },
+    replace: true,
+    restrict: 'EA',
+    link: function ($scope, iElm, iAttrs, controller) {
+      $scope.thumbnailSrc = getSource($scope.topic.content.type, $scope.topic.content.reference);
+    }
+  };
+});'use strict';
+/**
+ * content detail wrapper
+ */
+angular.module('topics').directive('contentWrapper', [
+  '$sce',
+  '$location',
+  function ($sce, $location) {
+    // get iframe source by type and reference
+    function getSource(content) {
+      if (content.type === 'youtube')
+        return '//www.youtube-nocookie.com/embed/' + content.reference + '?rel=0';
+      if (content.type === 'dailymotion')
+        return '//www.dailymotion.com/embed/video/' + content.reference + '?logo=0&info=0';
+    }
+    // get thumbnail source by type and reference
+    function getImgSource(content) {
+      if (content.type === 'youtube')
+        return 'http://img.youtube.com/vi/' + content.reference + '/0.jpg';
+      if (content.type === 'dailymotion')
+        return 'http://www.dailymotion.com/thumbnail/video/' + content.reference;
+      if (content.type === 'image')
+        return content.reference;
+    }
+    // Runs during compile
+    return {
+      templateUrl: 'modules/topics/views/templates/contentWrapper-topic.client.view.html',
+      scope: {
+        topic: '=',
+        user: '=',
+        like: '&',
+        unlike: '&'
+      },
+      replace: true,
+      restrict: 'EA',
+      link: function ($scope, iElm, iAttrs, controller) {
+        // watch topic to resolve
+        var topicWatcher = $scope.$watch('topic', function (topic) {
+            if (topic) {
+              $scope.iframeSrc = $sce.trustAsResourceUrl(getSource($scope.topic.content));
+              if (angular.isUndefined(iAttrs.editable)) {
+                // stop watching
+                topicWatcher();
+              }
+            }
+          });
+        // pageUrl of topic for social share
+        $scope.pageUrl = $location.absUrl();
+        // imgUrl of topic for social share
+        $scope.imgUrl = getImgSource($scope.topic.content);
+      }
     };
   }
 ]);'use strict';
 //Topics service used to communicate Topics REST endpoints
 angular.module('topics').factory('Topics', [
-  '$resource',
-  function ($resource) {
-    return $resource('topics/:topicId', { topicId: '@_id' }, { update: { method: 'PUT' } });
+  'Restangular',
+  function (Restangular) {
+    // Popular Topics Holder
+    var popularTopics;
+    // Random Topics Holder
+    var randomTopics;
+    var TopicService = {
+        createTopic: function (topic) {
+          return Restangular.service('topics').post(topic);
+        },
+        findTopics: function (query) {
+          return Restangular.service('topics').getList(query);
+        },
+        findTopic: function (topicId) {
+          return Restangular.service('topics').one(topicId).get();
+        },
+        likeTopic: function (topicId) {
+          return Restangular.service('topics/like').one(topicId).put();
+        },
+        unlikeTopic: function (topicId) {
+          return Restangular.service('topics/unlike').one(topicId).put();
+        },
+        findTopicPoems: function (topicId) {
+          return Restangular.service('topics/poems').one(topicId).getList();
+        },
+        createTopicPoem: function (topicId, poem) {
+          return Restangular.service('topics/poems/' + topicId).post(poem);
+        },
+        popularTopics: function () {
+          if (popularTopics)
+            return popularTopics;
+          else {
+            popularTopics = this.findTopics({
+              start: 0,
+              offset: 6
+            }).$object;
+            return popularTopics;
+          }
+        }
+      };
+    return TopicService;
   }
 ]);'use strict';
 // Config HTTP Error Handling
@@ -707,6 +1270,21 @@ angular.module('users').factory('Authentication', [function () {
     _this._data = { user: window.user };
     return _this._data;
   }]);'use strict';
+//User Profile Service
+angular.module('users').factory('UserProfile', function () {
+  return {
+    getUserProfileImageSrc: function (user) {
+      if (!user.additionalProvidersData)
+        return '/modules/users/img/user.jpg';
+      else if (user.additionalProvidersData.facebook)
+        return 'http://graph.facebook.com/' + user.additionalProvidersData.facebook.id + '/picture?type=square';
+      else if (user.additionalProvidersData.twitter)
+        return user.additionalProvidersData.twitter.profile_image_url;
+      else if (user.additionalProvidersData.google)
+        return user.additionalProvidersData.google.picture;
+    }
+  };
+});'use strict';
 // Users service used for communicating with the users REST endpoint
 angular.module('users').factory('Users', [
   '$resource',

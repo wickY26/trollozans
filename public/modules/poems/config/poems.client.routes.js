@@ -5,10 +5,10 @@ angular.module('poems').config(['$stateProvider',
 	function($stateProvider) {
 		// Poems state routing
 		$stateProvider.
-		state('listPoems', {
+/*		state('listPoems', {
 			url: '/poems',
 			templateUrl: 'modules/poems/views/list-poems.client.view.html'
-		}).
+		}).*/
 		state('createPoem', {
 			url: '/poems/create',
 			templateUrl: 'modules/poems/views/create-poem.client.view.html'

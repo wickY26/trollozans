@@ -6,12 +6,12 @@
  * @param  {[type]} $stateParams   [description]
  * @param  {[type]} $location      [description]
  * @param  {[type]} Authentication [description]
- * @param  {[type]} Admin)         {		$scope.authentication = Authentication;				$scope.findTopics = function () {			$scope.topics = Admin.one('topics').getList().$object;		};	}] [description]
+ * @param  {[type]} Admin          [description]
  * @return {[type]}                [description]
  */
-angular.module('admin').controller('AdminController', ['$scope', '$stateParams', '$location', 'Authentication', 'Admin', 'Constants',
+angular.module('admin').controller('AdminController', ['$scope', '$stateParams', '$location', 'Authentication', 'Admin', 'Poems', 'Constants',
 
-	function ($scope, $stateParams, $location, Authentication, Admin, Constants) {
+	function ($scope, $stateParams, $location, Authentication, Admin, Poems, Constants) {
 		$scope.authentication = Authentication;
 
 		/**
@@ -64,6 +64,21 @@ angular.module('admin').controller('AdminController', ['$scope', '$stateParams',
 				$location.path('topics/' + topic._id);
 			}, function (errorResponse) {
 				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		// find poems those wating for an approval
+		$scope.findUnapprovedPoems = function () {
+			$scope.poemPromise = Poems.one('waitingForApproval').getList();
+			$scope.poemPromise.then(function (poems) {
+				$scope.poems = poems;
+			});
+		};
+
+		$scope.approvePoem = function (poem, index) {
+			$scope.poemPromise = Poems.one('approve').one(poem._id).put();
+			$scope.poemPromise.then(function (response) {
+				$scope.poems.splice(index, 1);
 			});
 		};
 	}

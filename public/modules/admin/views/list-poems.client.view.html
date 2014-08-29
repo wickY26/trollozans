@@ -1,0 +1,18 @@
+<section data-ng-controller="AdminController" data-ng-init="findUnapprovedPoems()">
+    <div class="page-header">
+        <h1>Poems</h1>
+    </div>
+    <div class="list-group" data-cg-busy="{promise:poemPromise,backdrop:true,delay:0,minDuration:1000}">
+        <div class="media" data-ng-repeat="poem in poems">
+            <a class="pull-left" href="javascript:;" data-ng-click="approvePoem(poem, $index)">
+                <i class="fa fa-check-circle-o fa-5x"></i>
+            </a>
+            <div class="media-body">
+                <p class="poem" data-ng-bind="poem.content"></p>
+            </div>
+        </div>
+    </div>
+    <div class="alert alert-success text-center" data-ng-hide="poems.length">
+        <b>All poems are approved...</b>
+    </div>
+</section>
